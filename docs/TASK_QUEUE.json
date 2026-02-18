@@ -135,6 +135,21 @@
         "test -f docs/RUN_LOG.md"
       ],
       "notes": "Stability checkpoint for latest coverage update."
+    },
+    {
+      "id": "M3-004",
+      "stage": "M3",
+      "title": "Run riscof-based execution validation for Zabha updates",
+      "kind": "develop",
+      "complexity": "complex",
+      "status": "blocked",
+      "command": "",
+      "acceptance": [
+        "bash -lc 'command -v riscof >/dev/null'",
+        "bash -lc 'command -v spike >/dev/null'",
+        "bash -lc 'command -v sail_riscv_sim >/dev/null'"
+      ],
+      "notes": "Blocked: riscof/spike/sail executables unavailable in current offline environment."
     }
   ]
 }

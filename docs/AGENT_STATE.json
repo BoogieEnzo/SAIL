@@ -1,8 +1,8 @@
 {
   "execution_mode": "run",
   "allow_development": true,
-  "current_stage": "M4",
+  "current_stage": "M3",
   "current_task": null,
-  "updated_at": "2026-02-18T15:06:50+00:00",
-  "notes": "Auto-loop active; all current tasks done; waiting for new tasks or user input."
+  "updated_at": "2026-02-18T15:08:49+00:00",
+  "notes": "Auto-loop completed code tasks; execution validation blocked by missing/offline riscof toolchain."
 }

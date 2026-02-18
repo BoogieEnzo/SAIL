@@ -77,3 +77,12 @@
 ## 2026-02-18T15:06:50Z - Loop Event
 
 - Loop stopped: no runnable task
+
+## 2026-02-18T15:08:00Z - Blocking Event
+
+- Tried to install `riscof`:
+  - `python3 -m pip install --user riscof` failed due PEP668 externally managed environment.
+  - Created local venv and retried `pip install riscof`, failed because network/index is unreachable in current environment.
+- Result:
+  - `M3-004` marked as `blocked` in `docs/TASK_QUEUE.json`.
+  - Local gate still passes with `bash scripts/check_full.sh`.
