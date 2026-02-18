@@ -149,7 +149,7 @@
         "bash -lc 'command -v spike >/dev/null'",
         "bash -lc 'command -v sail_riscv_sim >/dev/null'"
       ],
-      "notes": "Blocked: riscof/spike/sail executables unavailable in current offline environment."
+      "notes": "runtime blocked: missing sail_riscv_sim binary"
     }
   ]
 }

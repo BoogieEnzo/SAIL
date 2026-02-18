@@ -86,3 +86,16 @@
 - Result:
   - `M3-004` marked as `blocked` in `docs/TASK_QUEUE.json`.
   - Local gate still passes with `bash scripts/check_full.sh`.
+
+## 2026-02-18T15:45:00Z - Blocking Event
+
+- Added `riscof` runtime config PATH wiring:
+  - `riscv-arch-test/riscof-plugins/rv32/config.ini`
+  - `riscv-arch-test/riscof-plugins/rv64/config.ini`
+- Added one-shot runtime script:
+  - `scripts/run_riscof_zabha.sh`
+- Runtime probe:
+  - `bash scripts/run_riscof_zabha.sh`
+  - Fails at precheck: missing `sail_riscv_sim` in `sail-riscv/build/c_emulator`.
+- Result:
+  - `M3-004` remains `blocked` until Sail simulator build succeeds.
