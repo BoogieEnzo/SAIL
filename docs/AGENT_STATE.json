@@ -1,8 +1,8 @@
 {
   "execution_mode": "run",
   "allow_development": true,
-  "current_stage": "M2",
-  "current_task": "M4-001",
-  "updated_at": "2026-02-18T14:59:40+00:00",
-  "notes": "Waiting for explicit user command before development tasks."
+  "current_stage": "M4",
+  "current_task": null,
+  "updated_at": "2026-02-18T15:00:15+00:00",
+  "notes": "Auto-loop active; all current tasks done; waiting for new tasks or user input."
 }

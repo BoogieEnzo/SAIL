@@ -44,7 +44,9 @@ def set_state(key: str, value: str) -> int:
     state = read_json(STATE_PATH)
     if key not in state:
         raise SystemExit(f"Unknown state key: {key}")
-    if isinstance(state[key], bool):
+    if value.lower() == "null":
+        state[key] = None
+    elif isinstance(state[key], bool):
         if value.lower() in ("true", "1", "yes"):
             state[key] = True
         elif value.lower() in ("false", "0", "no"):
@@ -52,7 +54,7 @@ def set_state(key: str, value: str) -> int:
         else:
             raise SystemExit(f"Invalid bool value: {value}")
     elif state[key] is None:
-        state[key] = None if value.lower() == "null" else value
+        state[key] = value
     else:
         state[key] = value
     state["updated_at"] = now_iso()
