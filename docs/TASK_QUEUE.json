@@ -1,0 +1,81 @@
+{
+  "policy": {
+    "acceptance_mode": "test-gated",
+    "split_rule": "complex tasks should be split; simple tasks may stay single",
+    "stage_gate_rule": "a stage is accepted only when all required tests pass"
+  },
+  "tasks": [
+    {
+      "id": "INFRA-001",
+      "stage": "INFRA",
+      "title": "Build agent control and loop framework",
+      "kind": "setup",
+      "complexity": "simple",
+      "status": "done",
+      "command": "",
+      "acceptance": [
+        "python3 -m json.tool docs/AGENT_STATE.json >/dev/null",
+        "python3 -m json.tool docs/TASK_QUEUE.json >/dev/null",
+        "test -x scripts/agent_loop.sh",
+        "test -x scripts/check_min.sh",
+        "test -x scripts/check_full.sh",
+        "test -x scripts/taskctl.py"
+      ],
+      "notes": "Self-loop and task control skeleton is installed."
+    },
+    {
+      "id": "M1-001",
+      "stage": "M1",
+      "title": "Sync docs and baseline analysis for Zabha plan",
+      "kind": "verify",
+      "complexity": "simple",
+      "status": "done",
+      "command": "",
+      "acceptance": [
+        "bash -lc 'if rg -n \"Ziccrse\" docs; then exit 1; else exit 0; fi'",
+        "bash scripts/check_min.sh"
+      ],
+      "notes": "Plan docs aligned to Zabha mainline."
+    },
+    {
+      "id": "M2-001",
+      "stage": "M2",
+      "title": "Implement and verify Zabha core test coverage in ACT",
+      "kind": "develop",
+      "complexity": "complex",
+      "status": "pending",
+      "command": "",
+      "acceptance": [
+        "bash scripts/check_full.sh"
+      ],
+      "notes": "Core AMO .b/.h coverage in rv32/rv64; stage accepted by checks only."
+    },
+    {
+      "id": "M3-001",
+      "stage": "M3",
+      "title": "Run integration validation for riscv-arch-test flow",
+      "kind": "develop",
+      "complexity": "complex",
+      "status": "pending",
+      "command": "",
+      "acceptance": [
+        "bash scripts/check_full.sh"
+      ],
+      "notes": "Can be split later only if blocked by environment/toolchain constraints."
+    },
+    {
+      "id": "M4-001",
+      "stage": "M4",
+      "title": "Prepare PR package and final report artifacts",
+      "kind": "develop",
+      "complexity": "simple",
+      "status": "pending",
+      "command": "",
+      "acceptance": [
+        "test -f docs/RUN_LOG.md",
+        "test -f docs/阶段验收标准.md"
+      ],
+      "notes": "No merge/submit without test evidence from prior stages."
+    }
+  ]
+}
