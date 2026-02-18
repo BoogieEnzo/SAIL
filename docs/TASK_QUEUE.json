@@ -56,7 +56,7 @@
       "title": "Run integration validation for riscv-arch-test flow",
       "kind": "develop",
       "complexity": "complex",
-      "status": "pending",
+      "status": "done",
       "command": "",
       "acceptance": [
         "bash scripts/check_full.sh"
