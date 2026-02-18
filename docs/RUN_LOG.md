@@ -73,3 +73,7 @@
 ## 2026-02-18T15:06:50Z - Loop Event
 
 - Task M3-003 marked done by loop
+
+## 2026-02-18T15:06:50Z - Loop Event
+
+- Loop stopped: no runnable task
