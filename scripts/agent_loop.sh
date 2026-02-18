@@ -6,6 +6,7 @@ cd "$ROOT_DIR"
 
 MAX_STEPS="${1:-20}"
 LOG_FILE="docs/RUN_LOG.md"
+CONTEXT_BRIEF="docs/CONTEXT_BRIEF.md"
 
 now() {
   date -u +"%Y-%m-%dT%H:%M:%SZ"
@@ -19,6 +20,48 @@ append_log() {
     echo ""
     echo "- ${msg}"
   } >>"$LOG_FILE"
+}
+
+refresh_context_brief() {
+  local ts
+  ts="$(now)"
+  {
+    echo "# Context Brief"
+    echo ""
+    echo "- refreshed_at: ${ts}"
+    echo ""
+    echo "## Agent State"
+    cat docs/AGENT_STATE.json
+    echo ""
+    echo "## Pending Tasks"
+    python3 - <<'PY'
+import json
+from pathlib import Path
+q=json.loads(Path("docs/TASK_QUEUE.json").read_text(encoding="utf-8"))
+for t in q["tasks"]:
+    if t["status"] in ("pending","doing","blocked"):
+        print(f"- {t['id']} [{t['status']}] {t['title']}")
+PY
+    echo ""
+    echo "## Recent Run Log (tail 80 lines)"
+    tail -n 80 "$LOG_FILE" || true
+  } > "$CONTEXT_BRIEF"
+}
+
+commit_if_dirty() {
+  local repo="$1"
+  local msg="$2"
+  if ! git -C "$repo" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    return 0
+  fi
+  if git -C "$repo" diff --quiet && git -C "$repo" diff --cached --quiet && [[ -z "$(git -C "$repo" ls-files --others --exclude-standard)" ]]; then
+    return 0
+  fi
+  git -C "$repo" add -A
+  if git -C "$repo" diff --cached --quiet; then
+    return 0
+  fi
+  git -C "$repo" commit -m "$msg" >/dev/null
 }
 
 state_mode="$(python3 - <<'PY'
@@ -44,6 +87,7 @@ if [[ "$state_mode" != "run" ]]; then
 fi
 
 for ((i=1; i<=MAX_STEPS; i++)); do
+  refresh_context_brief
   set +e
   if [[ "$allow_dev" == "true" ]]; then
     next_task="$(scripts/taskctl.py next --allow-development 2>/dev/null)"
@@ -102,6 +146,8 @@ PY
   if [[ "$ok" -eq 1 ]]; then
     scripts/taskctl.py set-status "$next_task" done >/dev/null
     append_log "Task ${next_task} marked done by loop"
+    commit_if_dirty "$ROOT_DIR" "loop: ${next_task} done (state/docs sync)"
+    commit_if_dirty "$ROOT_DIR/riscv-arch-test" "loop: ${next_task} done (zabha progress)"
   else
     scripts/taskctl.py set-status "$next_task" blocked --note "auto-loop acceptance failed" >/dev/null
     append_log "Task ${next_task} marked blocked by loop"

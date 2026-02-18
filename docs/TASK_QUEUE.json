@@ -32,7 +32,7 @@
       "status": "done",
       "command": "",
       "acceptance": [
-        "bash -lc 'if rg -n \"Ziccrse\" docs; then exit 1; else exit 0; fi'",
+        "bash -lc 'if rg -n \"Ziccrse\" docs/Agent执行计划.md docs/汇报计划.md docs/实习方向.md; then exit 1; else exit 0; fi'",
         "bash scripts/check_min.sh"
       ],
       "notes": "Plan docs aligned to Zabha mainline."
