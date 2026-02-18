@@ -14,7 +14,7 @@
 **启动时机**：M1开始时
 **任务**：
 - 下载Zabha规范文档（PDF）
-- 提取所有16条指令的详细信息（编码、操作语义）
+- 提取所有18条指令的详细信息（编码、操作语义）
 - 确认对齐要求和边界情况
 - 分析ACT现有测试结构
 
@@ -101,7 +101,7 @@
 - 添加边界情况测试
 
 **交付物**：
-- 全部16条指令的测试代码
+- 全部18条指令的测试代码
 - 测试覆盖率报告
 - 所有测试通过确认
 
@@ -218,10 +218,10 @@ M1
 
 M2
 ├── Agent 4 (框架搭建) ──> 
-└── Agent 5 (CSR实现) ───> 主AI整合 ──> 汇报M2 ──> 用户确认
+└── Agent 5 (完整测试开发) ───> 主AI整合 ──> 汇报M2 ──> 用户确认
 
 M3
-├── Agent 6 (页表集成) ──>
+├── Agent 6 (测试集成与适配) ──>
 └── Agent 7 (测试验证) ──> 主AI整合 ──> 汇报M3 ──> 用户确认
 
 M4
@@ -238,23 +238,23 @@ M4
 task(
   category="deep",
   load_skills=["git-master"],
-  description="搜索Ziccrse规范",
+  description="搜索Zabha规范",
   prompt="""
-  [CONTEXT] 需要为sail-riscv项目实现Ziccrse扩展，首先需要找到官方规范文档。
+  [CONTEXT] 需要为ACT（riscv-arch-test）项目添加Zabha测试支持，首先需要确认官方规范细节。
   
-  [GOAL] 找到Ziccrse的RISC-V规范文档，确认需要实现哪些CSR。
+  [GOAL] 找到Zabha的RISC-V规范文档，确认18条指令的编码、语义和约束。
   
   [REQUEST] 
-  1. 搜索RISC-V官方规范库中的Ziccrse文档
-  2. 搜索GitHub riscv-CMOs仓库
-  3. 搜索RISC-V邮件列表存档
-  4. 确认Ziccrse是否已批准
-  5. 提取CSR列表（地址、名称、功能）
-  6. 如果找不到Ziccrse，搜索Ziccamoa作为备选
+  1. 搜索RISC-V官方规范库中的Zabha文档
+  2. 确认Zabha是否已批准
+  3. 提取18条指令列表（含.B/.H版本）
+  4. 提取关键测试约束：对齐要求、异常行为、边界条件
+  5. 输出可直接用于ACT测试设计的检查点
   
   [DELIVERABLE]
   - 规范文档链接或PDF路径
-  - CSR详细列表
+  - 18条指令详细列表
+  - 关键约束清单（对齐/异常/边界）
   - 或"找不到规范"的报告
   """
 )
@@ -265,22 +265,21 @@ task(
 task(
   category="explore",
   load_skills=["git-master"],
-  description="分析Ssqosid参考实现",
+  description="分析ACT A扩展参考实现",
   prompt="""
-  [CONTEXT] 需要实现Ziccrse扩展（CSR扩展），需要学习sail-riscv中现有CSR扩展的实现模式。
+  [CONTEXT] 需要在ACT中新增Zabha测试，需要学习A扩展在ACT中的测试实现模式。
   
-  [GOAL] 分析Ssqosid扩展，提取可复用的代码模板。
+  [GOAL] 分析A扩展测试，提取可复用的测试模板。
   
   [REQUEST]
-  1. 分析 model/extensions/Ssqosid/ 目录结构
-  2. 分析Ssqosid的CSR定义方式
-  3. 分析read_CSR和write_CSR的实现
-  4. 分析扩展注册流程（extensions.sail, riscv.sail_project等）
-  5. 提取代码模板（填空即可使用的代码片段）
-  6. 总结CSR扩展的实现模式
+  1. 分析 riscv-test-suite 中A扩展测试目录结构
+  2. 分析测试定义、test_pool、宏和自检汇编组织方式
+  3. 分析rv32/rv64变体复用方式
+  4. 提取可复用模板（可替换指令即用）
+  5. 总结ACT测试开发的实现模式
   
   [DELIVERABLE]
-  - Ssqosid代码结构分析文档
+  - ACT A扩展代码结构分析文档
   - 可复用代码模板
   - 实现模式总结
   """
@@ -292,17 +291,17 @@ task(
 task(
   category="explore",
   load_skills=["git-master"],
-  description="检查Ziccrse实现冲突",
+  description="检查Zabha测试实现冲突",
   prompt="""
-  [CONTEXT] 计划实现Ziccrse扩展，需要确认没有重复工作。
+  [CONTEXT] 计划在ACT中实现Zabha测试，需要确认没有重复工作。
   
-  [GOAL] 检查sail-riscv中Ziccrse的实现状态。
+  [GOAL] 检查riscv-arch-test中Zabha测试的实现状态与外部冲突风险。
   
   [REQUEST]
-  1. 搜索sail-riscv代码库中是否有Ziccrse相关代码
-  2. 搜索GitHub Issues中是否有Ziccrse相关讨论
-  3. 搜索GitHub PRs中是否有Ziccrse实现
-  4. 检查分配者Prashanth Mundkur的近期GitHub活动
+  1. 搜索riscv-arch-test代码库中是否有Zabha测试
+  2. 搜索GitHub Issues中是否有Zabha测试相关讨论
+  3. 搜索GitHub PRs中是否有Zabha测试实现
+  4. 判断是否存在重复开发风险
   5. 评估继续实现的风险
   
   [DELIVERABLE]
@@ -329,12 +328,12 @@ task(
 
 | 风险 | Agent | 应对 |
 |------|-------|------|
-| 规范找不到 | Agent 1 | 启动Ziccamoa搜索作为备选 |
+| 规范找不到 | Agent 1 | 搜索RISC-V官方规范镜像与历史版本 |
 | 代码分析不充分 | Agent 2 | 要求分析更多参考实现 |
 | 发现冲突 | Agent 3 | 建议用户换方案或等待 |
 | 框架搭建失败 | Agent 4 | 检查依赖关系，重试或询问用户 |
-| CSR实现复杂 | Agent 5 | 分步骤实现，简化功能 |
-| 页表集成太难 | Agent 6 | 只做CSR部分，PR中说明 |
+| 完整测试开发复杂 | Agent 5 | 分操作类型逐步覆盖并持续验证 |
+| 测试集成适配复杂 | Agent 6 | 先最小可运行集成，再扩展全部指令 |
 | 测试失败 | Agent 7 | 修复或记录问题询问用户 |
 
 ---
