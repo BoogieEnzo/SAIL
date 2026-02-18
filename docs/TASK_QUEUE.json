@@ -100,7 +100,7 @@
       "title": "Re-run full gate and persist snapshot after amocas integration",
       "kind": "develop",
       "complexity": "simple",
-      "status": "pending",
+      "status": "done",
       "command": "",
       "acceptance": [
         "bash scripts/check_full.sh",
