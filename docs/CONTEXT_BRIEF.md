@@ -1,18 +1,20 @@
 # Context Brief
 
-- refreshed_at: 2026-02-18T14:59:40Z
+- refreshed_at: 2026-02-18T15:05:38Z
 
 ## Agent State
 {
   "execution_mode": "run",
   "allow_development": true,
-  "current_stage": "M2",
-  "current_task": "null",
-  "updated_at": "2026-02-18T14:59:40+00:00",
-  "notes": "Waiting for explicit user command before development tasks."
+  "current_stage": "M4",
+  "current_task": null,
+  "updated_at": "2026-02-18T15:00:15+00:00",
+  "notes": "Auto-loop active; all current tasks done; waiting for new tasks or user input."
 }
 
 ## Pending Tasks
+- M2-002 [pending] Add Zabha+Zacas amocas.b/h tests for rv32/rv64
+- M3-002 [pending] Re-run full gate and persist snapshot after amocas integration
 
 ## Recent Run Log (tail 80 lines)
 # Run Log
@@ -66,3 +68,7 @@
 ## 2026-02-18T14:59:40Z - Loop Event
 
 - Task M4-001 marked done by loop
+
+## 2026-02-18T14:59:40Z - Loop Event
+
+- Loop stopped: no runnable task

@@ -39,4 +39,34 @@ if rg -n '\.w-01\.S|\.w covergroup|TEST_AMO_OP\([a-z0-9]+\.w,' "$rv32_dir" "$rv6
   exit 1
 fi
 
+echo "[check_full] validating Zabha+Zacas amocas.b/h integration tests"
+for f in \
+  "riscv-arch-test/riscv-test-suite/rv32i_m/Zacas/src/amocas.b-01.S" \
+  "riscv-arch-test/riscv-test-suite/rv32i_m/Zacas/src/amocas.h-01.S" \
+  "riscv-arch-test/riscv-test-suite/rv64i_m/Zacas/src/amocas.b-01.S" \
+  "riscv-arch-test/riscv-test-suite/rv64i_m/Zacas/src/amocas.h-01.S"; do
+  test -f "$f"
+done
+
+if ! rg -n 'RVTEST_ISA\("RV32IA,RV32IZabha,RV32IZacas"\)' \
+  riscv-arch-test/riscv-test-suite/rv32i_m/Zacas/src/amocas.b-01.S \
+  riscv-arch-test/riscv-test-suite/rv32i_m/Zacas/src/amocas.h-01.S >/dev/null; then
+  echo "[check_full] rv32 amocas.b/h ISA tag mismatch"
+  exit 1
+fi
+if ! rg -n 'RVTEST_ISA\("RV64IA,RV64IZabha,RV64IZacas"\)' \
+  riscv-arch-test/riscv-test-suite/rv64i_m/Zacas/src/amocas.b-01.S \
+  riscv-arch-test/riscv-test-suite/rv64i_m/Zacas/src/amocas.h-01.S >/dev/null; then
+  echo "[check_full] rv64 amocas.b/h ISA tag mismatch"
+  exit 1
+fi
+if ! rg -n 'regex\(\.\*Zabha\.\*Zacas\.\*\)' \
+  riscv-arch-test/riscv-test-suite/rv32i_m/Zacas/src/amocas.b-01.S \
+  riscv-arch-test/riscv-test-suite/rv32i_m/Zacas/src/amocas.h-01.S \
+  riscv-arch-test/riscv-test-suite/rv64i_m/Zacas/src/amocas.b-01.S \
+  riscv-arch-test/riscv-test-suite/rv64i_m/Zacas/src/amocas.h-01.S >/dev/null; then
+  echo "[check_full] amocas.b/h case gate missing Zabha+Zacas regex"
+  exit 1
+fi
+
 echo "[check_full] ok"
