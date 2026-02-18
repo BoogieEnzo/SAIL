@@ -128,7 +128,7 @@
       "title": "Re-run full gate after rv64 coverage addition",
       "kind": "develop",
       "complexity": "simple",
-      "status": "pending",
+      "status": "done",
       "command": "",
       "acceptance": [
         "bash scripts/check_full.sh",

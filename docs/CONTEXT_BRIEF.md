@@ -1,6 +1,6 @@
 # Context Brief
 
-- refreshed_at: 2026-02-18T15:06:48Z
+- refreshed_at: 2026-02-18T15:06:49Z
 
 ## Agent State
 {
@@ -8,12 +8,11 @@
   "allow_development": true,
   "current_stage": "M4",
   "current_task": null,
-  "updated_at": "2026-02-18T15:05:40+00:00",
+  "updated_at": "2026-02-18T15:06:49+00:00",
   "notes": "Auto-loop active; all current tasks done; waiting for new tasks or user input."
 }
 
 ## Pending Tasks
-- M2-003 [pending] Add rv64 Zabha coverage cgf baseline
 - M3-003 [pending] Re-run full gate after rv64 coverage addition
 
 ## Recent Run Log (tail 80 lines)
@@ -84,3 +83,7 @@
 ## 2026-02-18T15:05:40Z - Loop Event
 
 - Loop stopped: no runnable task
+
+## 2026-02-18T15:06:49Z - Loop Event
+
+- Task M2-003 marked done by loop
