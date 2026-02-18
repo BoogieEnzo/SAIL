@@ -69,7 +69,7 @@
       "title": "Prepare PR package and final report artifacts",
       "kind": "develop",
       "complexity": "simple",
-      "status": "pending",
+      "status": "done",
       "command": "",
       "acceptance": [
         "test -f docs/RUN_LOG.md",
