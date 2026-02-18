@@ -43,7 +43,7 @@
       "title": "Implement and verify Zabha core test coverage in ACT",
       "kind": "develop",
       "complexity": "complex",
-      "status": "pending",
+      "status": "done",
       "command": "",
       "acceptance": [
         "bash scripts/check_full.sh"

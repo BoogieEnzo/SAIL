@@ -1,8 +1,8 @@
 {
-  "execution_mode": "hold",
-  "allow_development": false,
+  "execution_mode": "run",
+  "allow_development": true,
   "current_stage": "M2",
-  "current_task": null,
-  "updated_at": "2026-02-18T00:00:00Z",
+  "current_task": "M2-001",
+  "updated_at": "2026-02-18T14:59:37+00:00",
   "notes": "Waiting for explicit user command before development tasks."
 }
