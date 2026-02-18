@@ -107,6 +107,34 @@
         "test -f docs/CONTEXT_BRIEF.md"
       ],
       "notes": "Integration snapshot and stability check."
+    },
+    {
+      "id": "M2-003",
+      "stage": "M2",
+      "title": "Add rv64 Zabha coverage cgf baseline",
+      "kind": "develop",
+      "complexity": "simple",
+      "status": "done",
+      "command": "",
+      "acceptance": [
+        "test -f riscv-arch-test/coverage/zabha/rv64zabha.cgf",
+        "bash scripts/check_full.sh"
+      ],
+      "notes": "Enable rv64 side coverage entry for Zabha."
+    },
+    {
+      "id": "M3-003",
+      "stage": "M3",
+      "title": "Re-run full gate after rv64 coverage addition",
+      "kind": "develop",
+      "complexity": "simple",
+      "status": "pending",
+      "command": "",
+      "acceptance": [
+        "bash scripts/check_full.sh",
+        "test -f docs/RUN_LOG.md"
+      ],
+      "notes": "Stability checkpoint for latest coverage update."
     }
   ]
 }

@@ -69,4 +69,14 @@ if ! rg -n 'regex\(\.\*Zabha\.\*Zacas\.\*\)' \
   exit 1
 fi
 
+echo "[check_full] validating coverage files for rv32/rv64 Zabha"
+test -f riscv-arch-test/coverage/zabha/rv32zabha.cgf
+test -f riscv-arch-test/coverage/zabha/rv64zabha.cgf
+if ! rg -n '^amocas\.b:|^amocas\.h:' \
+  riscv-arch-test/coverage/zabha/rv32zabha.cgf \
+  riscv-arch-test/coverage/zabha/rv64zabha.cgf >/dev/null; then
+  echo "[check_full] missing amocas.b/h covergroups in zabha coverage files"
+  exit 1
+fi
+
 echo "[check_full] ok"

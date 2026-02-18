@@ -1,6 +1,6 @@
 # Context Brief
 
-- refreshed_at: 2026-02-18T15:05:40Z
+- refreshed_at: 2026-02-18T15:06:48Z
 
 ## Agent State
 {
@@ -13,6 +13,8 @@
 }
 
 ## Pending Tasks
+- M2-003 [pending] Add rv64 Zabha coverage cgf baseline
+- M3-003 [pending] Re-run full gate after rv64 coverage addition
 
 ## Recent Run Log (tail 80 lines)
 # Run Log
@@ -78,3 +80,7 @@
 ## 2026-02-18T15:05:40Z - Loop Event
 
 - Task M3-002 marked done by loop
+
+## 2026-02-18T15:05:40Z - Loop Event
+
+- Loop stopped: no runnable task
