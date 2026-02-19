@@ -283,3 +283,18 @@
 - Minimal next step:
   1. Provide Zabha-capable `riscv64-unknown-elf-gcc/binutils` in PATH.
   2. Re-run `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` to continue from next pending stage.
+
+## 2026-02-19T20:39:22+08:00 - Auto Loop Continue (Phase3)
+
+- Command: `bash scripts/run_riscof_zabha_auto.sh`
+- Stage selected from state: `phase3`.
+- Selection/result:
+  - `stage3_mode=wide_compat`
+  - `stage3_selected=240`
+  - Test outcome: phase3 passed, report generated at `work-zabha/report.html`.
+- Runtime note:
+  - During reference run there was an internal timeout warning line from riscof/make (`Command did not exit within 300 seconds`) for one spawned command, but final stage status remained pass and script exited 0.
+- State update:
+  - Wrote `/home/fengde/SAIL/riscv-arch-test/work-zabha/.auto_stage_state` = `phase3_done`.
+- Next action:
+  - Run same command again to execute `phase4_1`.
