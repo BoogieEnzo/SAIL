@@ -252,3 +252,17 @@
   - Wrote `/home/fengde/SAIL/riscv-arch-test/work-zabha/.auto_stage_state` = `phase1_done`.
 - Next action:
   - Run same command again to execute `phase2`.
+
+## 2026-02-19T20:08:54+08:00 - Auto Loop Continue (Phase2)
+
+- Command: `bash scripts/run_riscof_zabha_auto.sh`
+- Stage selected from state: `phase2`.
+- Probe result: no Zabha support in local GNU toolchain; using compat-core set.
+- Selection/result:
+  - `stage2_mode=core_compat`
+  - `stage2_selected=20`
+  - Test outcome: 20/20 passed.
+- State update:
+  - Wrote `/home/fengde/SAIL/riscv-arch-test/work-zabha/.auto_stage_state` = `phase2_done`.
+- Next action:
+  - Run same command again to execute `phase3`.
