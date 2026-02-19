@@ -208,3 +208,15 @@
 - Minimal next step:
   1. Install/point to a riscv GNU toolchain that supports Zabha opcodes in assembler.
   2. Re-run `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` repeatedly to finish phase3/phase4.
+
+## 2026-02-19T18:29:50+08:00 - Phased Loop Expansion + Stage2 Pass
+
+- Expanded `scripts/run_riscof_zabha_auto.sh` from 2 phases to 5 phases:
+  - `phase1` smoke, `phase2` compat-core, `phase3` compat-wide sample, `phase4` full-compatible, `phase5` full Zabha.
+- Acceptance evidence:
+  - `phase2` selected 20 tests and passed all.
+- Current execution:
+  - `phase3` running with 240-test compat-wide sample.
+  - DUT signatures are continuously generated; run is active.
+- Expected boundary:
+  - `phase5` remains blocked on this host until GNU toolchain supports Zabha opcodes.

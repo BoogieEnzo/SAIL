@@ -142,14 +142,14 @@
       "title": "Run riscof-based execution validation for Zabha updates",
       "kind": "develop",
       "complexity": "complex",
-      "status": "blocked",
+      "status": "in_progress",
       "command": "",
       "acceptance": [
         "bash -lc 'command -v riscof >/dev/null'",
         "bash -lc 'command -v spike >/dev/null'",
         "bash -lc 'command -v sail_riscv_sim >/dev/null'"
       ],
-      "notes": "phased validation active: stage1(stage smoke) and stage2(compat-core) passed; final full Zabha run blocked because local riscv64-unknown-elf/binutils do not recognize Zabha opcodes (e.g., amoadd.b)"
+      "notes": "phased validation active: stage1(stage smoke) and stage2(compat-core) passed; stage3 running. Final phase5(full Zabha) is expected blocked unless toolchain gains Zabha opcode support."
     }
   ]
 }
