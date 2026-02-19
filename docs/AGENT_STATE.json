@@ -3,6 +3,6 @@
   "allow_development": true,
   "current_stage": "M3",
   "current_task": "M3-004",
-  "updated_at": "2026-02-19T11:57:51+08:00",
-  "notes": "M3-004 blocked by offline fetch in sail-riscv configure: cannot resolve github.com for CLI11/jsoncons FetchContent, so sail_riscv_sim is not built."
+  "updated_at": "2026-02-19T18:11:28+08:00",
+  "notes": "M3-004 is phased: stage1/stage2 validation passed; final Zabha full-run remains blocked by local riscv64-unknown-elf toolchain lacking Zabha opcode support."
 }

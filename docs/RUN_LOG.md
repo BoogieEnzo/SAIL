@@ -188,3 +188,23 @@
   1. Restore access to `github.com` (DNS/proxy) for build-time FetchContent.
   2. Re-run `cd /home/fengde/SAIL/sail-riscv && OPAMROOT=/home/fengde/SAIL/.opam eval "$(opam env --root /home/fengde/SAIL/.opam --switch 5.1.1)" && ./build_simulator.sh`.
   3. Re-run `bash /home/fengde/SAIL/scripts/run_riscof_zabha.sh`.
+
+## 2026-02-19T18:11:28+08:00 - M3-004 Phased Validation Iteration
+
+- Added staged execution script to reduce full-run churn:
+  - `scripts/run_riscof_zabha_auto.sh` now supports multi-phase flow: `phase1 -> phase2 -> phase3 -> phase4` (single-command auto progression).
+- Runtime compatibility fixes applied before phased run:
+  - Removed unsupported `--misaligned` flag from rv64 `spike_simple` plugin.
+  - Updated rv64 ISA config to remove unsupported `Zimop`/`Zcmop` tokens for current local toolchain.
+  - Updated rv64 `sail_cSim` plugin to parse JSONC output from `sail_riscv_sim --print-default-config`.
+- Validation evidence:
+  - `phase1` (toolchain-aware smoke) passed and generated report.
+  - `phase2` (compat-core subset) selected 20 tests and all passed.
+- Blocking evidence for full Zabha path:
+  - Probe command fails: `riscv64-unknown-elf-gcc -c -march=rv64imafd_zicsr_zabha ...`
+  - Error: `unknown prefixed ISA extension 'zabha'` and `unrecognized opcode 'amoadd.b'`.
+- Decision:
+  - Keep `M3-004` as `blocked` for final full Zabha run until toolchain with Zabha support is available.
+- Minimal next step:
+  1. Install/point to a riscv GNU toolchain that supports Zabha opcodes in assembler.
+  2. Re-run `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` repeatedly to finish phase3/phase4.
