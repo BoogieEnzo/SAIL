@@ -149,7 +149,7 @@
         "bash -lc 'command -v spike >/dev/null'",
         "bash -lc 'command -v sail_riscv_sim >/dev/null'"
       ],
-      "notes": "phased validation active: phase4 is split into 24 chunks and phase5 remains 4 chunks for resumable execution. Baseline phase1/phase2/phase3 already passed; latest chunk results are phase4_1 and phase4_2 passed (both 79/79) with state checkpoint phase4_2_done, next target phase4_3. phase5_1 gate check returns blocked(exit 3) on current host until toolchain gains Zabha opcode support."
+      "notes": "phased validation active: phase4 is split into 24 chunks and phase5 remains 4 chunks for resumable execution. Baseline phase1/phase2/phase3 already passed; latest chunk results are phase4_1/phase4_2/phase4_3 passed (all 79/79) with state checkpoint phase4_3_done, next target phase4_4. phase5_1 gate check returns blocked(exit 3) on current host until toolchain gains Zabha opcode support."
     }
   ]
 }

@@ -363,3 +363,17 @@
   - `riscv-arch-test/work-zabha/.auto_stage_state` = `phase4_2_done`
 - Next action:
   1. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` (auto to `phase4_3`).
+
+## 2026-02-19T22:31:35+08:00 - phase4_3 Result
+
+- Command:
+  - `bash scripts/run_riscof_zabha_auto.sh phase4_3`
+- Selection/result:
+  - `stage4_selected=1892`
+  - `phase4_3_selected=79`
+  - Test outcome: `79/79 Passed`
+  - Script exit code: `0`
+- State update:
+  - `riscv-arch-test/work-zabha/.auto_stage_state` = `phase4_3_done`
+- Next action:
+  1. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` (auto to `phase4_4`).
