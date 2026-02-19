@@ -377,3 +377,33 @@
   - `riscv-arch-test/work-zabha/.auto_stage_state` = `phase4_3_done`
 - Next action:
   1. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` (auto to `phase4_4`).
+
+## 2026-02-20T07:30:35+08:00 - Resume + phase4_4 Result
+
+- Session recovery summary:
+  - Reviewed:
+    - `docs/AGENT_STATE.json`
+    - `docs/TASK_QUEUE.json`
+    - `docs/RUN_LOG.md`
+    - `docs/CONTEXT_BRIEF.md`
+- Quick environment check (required):
+  - Command: `command -v riscof spike sail_riscv_sim riscv64-unknown-elf-gcc || true`
+  - Result: only `/usr/bin/riscv64-unknown-elf-gcc` in current PATH.
+  - Existence check:
+    - `[exists] .venv`
+    - `[exists] tools/spike`
+    - `[exists] sail-riscv/build`
+- Baseline gate:
+  - `bash scripts/check_min.sh` => passed.
+- phase4_4 execution:
+  - Command: `bash scripts/run_riscof_zabha_auto.sh`
+  - Auto-selected stage from state: `phase4_4`
+  - Selection/result:
+    - `stage4_selected=1892`
+    - `phase4_4_selected=79`
+    - Test outcome: `79/79 Passed`
+    - Script exit code: `0`
+  - State update:
+    - `riscv-arch-test/work-zabha/.auto_stage_state` = `phase4_4_done`
+- Next action:
+  1. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` (auto to `phase4_5`).
