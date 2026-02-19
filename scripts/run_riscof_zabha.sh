@@ -6,6 +6,7 @@ export PATH="${ROOT_DIR:-/home/fengde/SAIL}/tools/no_ccache_bin:${PATH:-}"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RAT_DIR="${ROOT_DIR}/riscv-arch-test"
 WORK_DIR="${RAT_DIR}/work-zabha"
+CFG_DIR="${RAT_DIR}/riscof-plugins/rv64"
 
 if [[ ! -x "${ROOT_DIR}/.venv/bin/riscof" ]]; then
   echo "missing ${ROOT_DIR}/.venv/bin/riscof"
@@ -24,22 +25,21 @@ fi
 
 export PATH="/home/fengde/SAIL/tools/spike/bin:/home/fengde/SAIL/sail-riscv/build/c_emulator:${PATH}"
 
-cd "${RAT_DIR}"
 mkdir -p "${WORK_DIR}"
+cd "${CFG_DIR}"
 
 echo "[run_riscof_zabha] generate testlist (rv64)"
 "${ROOT_DIR}/.venv/bin/riscof" testlist \
-  --config riscof-plugins/rv64/config.ini \
-  --suite riscv-test-suite \
-  --env riscv-test-suite/env \
-  --work-dir "${WORK_DIR}" \
-  --no-browser
+  --config config.ini \
+  --suite "${RAT_DIR}/riscv-test-suite" \
+  --env "${RAT_DIR}/riscv-test-suite/env" \
+  --work-dir "${WORK_DIR}"
 
 echo "[run_riscof_zabha] run suite (rv64)"
 "${ROOT_DIR}/.venv/bin/riscof" run \
-  --config riscof-plugins/rv64/config.ini \
-  --suite riscv-test-suite \
-  --env riscv-test-suite/env \
+  --config config.ini \
+  --suite "${RAT_DIR}/riscv-test-suite" \
+  --env "${RAT_DIR}/riscv-test-suite/env" \
   --work-dir "${WORK_DIR}" \
   --no-browser
 
