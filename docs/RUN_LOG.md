@@ -298,3 +298,17 @@
   - Wrote `/home/fengde/SAIL/riscv-arch-test/work-zabha/.auto_stage_state` = `phase3_done`.
 - Next action:
   - Run same command again to execute `phase4_1`.
+
+## 2026-02-19T21:19:23+08:00 - Phase4 Granularity Tuning (4 -> 12)
+
+- User requirement: phase4 should be finer-grained (about one-third of previous chunk size) to reduce loss on interruptions.
+- Script update:
+  - `scripts/run_riscof_zabha_auto.sh`
+  - Added `PHASE4_CHUNKS=12` and upgraded phase4 stage mapping/auto-resume logic from 4 chunks to 12 chunks.
+  - Kept phase5 split as 4 chunks.
+- Acceptance checks:
+  - `bash -n scripts/run_riscof_zabha_auto.sh` => `bash_syntax_ok`.
+  - Verified key markers exist: `PHASE4_CHUNKS=12`, `phase4_1..phase4_12` usage string, phase4 chunk regex `^phase4_([1-9]|1[0-2])$`.
+- Next action:
+  1. Restore stage pointer as needed (`phase3_done` if interrupted).
+  2. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh`.

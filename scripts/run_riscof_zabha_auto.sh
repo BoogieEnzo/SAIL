@@ -12,6 +12,8 @@ STAGE3_TESTLIST="${WORK_DIR}/test_list_stage3.yaml"
 STAGE4_TESTLIST="${WORK_DIR}/test_list_stage4.yaml"
 STAGE5_TESTLIST="${WORK_DIR}/test_list_stage5.yaml"
 PROBE_LOG="${WORK_DIR}/zabha_probe.log"
+PHASE4_CHUNKS=12
+PHASE5_CHUNKS=4
 
 if [[ ! -x "${ROOT_DIR}/.venv/bin/riscof" ]]; then
   echo "missing ${ROOT_DIR}/.venv/bin/riscof"
@@ -50,31 +52,33 @@ EOF
 
 stage="${1:-auto}"
 if [[ "${stage}" == "auto" ]]; then
-  if [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_done$" "${STATE_FILE}"; then
+  state_val=""
+  if [[ -f "${STATE_FILE}" ]]; then
+    state_val="$(cat "${STATE_FILE}")"
+  fi
+  if [[ "${state_val}" == "phase5_done" ]]; then
     stage="done"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_4_done$" "${STATE_FILE}"; then
-    stage="done"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_3_done$" "${STATE_FILE}"; then
-    stage="phase5_4"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_2_done$" "${STATE_FILE}"; then
-    stage="phase5_3"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_1_done$" "${STATE_FILE}"; then
-    stage="phase5_2"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_4_done$" "${STATE_FILE}"; then
+  elif [[ "${state_val}" =~ ^phase5_([0-9]+)_done$ ]]; then
+    idx="${BASH_REMATCH[1]}"
+    if (( idx >= PHASE5_CHUNKS )); then
+      stage="done"
+    else
+      stage="phase5_$((idx + 1))"
+    fi
+  elif [[ "${state_val}" == "phase4_done" ]]; then
     stage="phase5_1"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_done$" "${STATE_FILE}"; then
-    stage="phase5_1"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_3_done$" "${STATE_FILE}"; then
-    stage="phase4_4"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_2_done$" "${STATE_FILE}"; then
-    stage="phase4_3"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_1_done$" "${STATE_FILE}"; then
-    stage="phase4_2"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase3_done$" "${STATE_FILE}"; then
+  elif [[ "${state_val}" =~ ^phase4_([0-9]+)_done$ ]]; then
+    idx="${BASH_REMATCH[1]}"
+    if (( idx >= PHASE4_CHUNKS )); then
+      stage="phase5_1"
+    else
+      stage="phase4_$((idx + 1))"
+    fi
+  elif [[ "${state_val}" == "phase3_done" ]]; then
     stage="phase4_1"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase2_done$" "${STATE_FILE}"; then
+  elif [[ "${state_val}" == "phase2_done" ]]; then
     stage="phase3"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase1_done$" "${STATE_FILE}"; then
+  elif [[ "${state_val}" == "phase1_done" ]]; then
     stage="phase2"
   else
     stage="phase1"
@@ -133,9 +137,10 @@ items = sorted(data.items(), key=lambda kv: kv[0])
 total = len(items)
 if total == 0:
     raise SystemExit("stage4 split source has 0 tests")
-chunk_size = math.ceil(total / 4)
+chunk_count = 12
+chunk_size = math.ceil(total / chunk_count)
 
-for idx in range(4):
+for idx in range(chunk_count):
     start = idx * chunk_size
     end = min((idx + 1) * chunk_size, total)
     chunk = dict(items[start:end])
@@ -190,14 +195,19 @@ PY
 }
 
 if [[ "${stage}" == "phase4" ]]; then
-  if [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_3_done$" "${STATE_FILE}"; then
-    stage="phase4_4"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_2_done$" "${STATE_FILE}"; then
-    stage="phase4_3"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_1_done$" "${STATE_FILE}"; then
-    stage="phase4_2"
-  else
-    stage="phase4_1"
+  stage="phase4_1"
+  if [[ -f "${STATE_FILE}" ]]; then
+    state_val="$(cat "${STATE_FILE}")"
+    if [[ "${state_val}" =~ ^phase4_([0-9]+)_done$ ]]; then
+      idx="${BASH_REMATCH[1]}"
+      if (( idx < PHASE4_CHUNKS )); then
+        stage="phase4_$((idx + 1))"
+      else
+        stage="phase5_1"
+      fi
+    elif [[ "${state_val}" == "phase4_done" ]]; then
+      stage="phase5_1"
+    fi
   fi
 fi
 
@@ -380,9 +390,9 @@ PY
   exit 0
 fi
 
-if [[ "${stage}" =~ ^phase4_[1234]$ ]]; then
+if [[ "${stage}" =~ ^phase4_([1-9]|1[0-2])$ ]]; then
   chunk_idx="${stage#phase4_}"
-  echo "[auto] ${stage}: full-compatible chunk ${chunk_idx}/4"
+  echo "[auto] ${stage}: full-compatible chunk ${chunk_idx}/${PHASE4_CHUNKS}"
   prepare_stage4_subtasks
 
   chunk_file="${WORK_DIR}/test_list_stage4_${chunk_idx}.yaml"
@@ -401,7 +411,7 @@ PY
   fi
 
   echo "phase4_${chunk_idx}_done" > "${STATE_FILE}"
-  if [[ "${chunk_idx}" == "4" ]]; then
+  if (( chunk_idx == PHASE4_CHUNKS )); then
     echo "phase4_done" > "${STATE_FILE}"
     echo "[auto] stage4 all chunks passed."
     echo "[auto] next: run the same command again for stage5 (true full Zabha)."
@@ -415,7 +425,7 @@ fi
 
 if [[ "${stage}" =~ ^phase5_[1234]$ ]]; then
   chunk_idx="${stage#phase5_}"
-  echo "[auto] ${stage}: full Zabha chunk ${chunk_idx}/4"
+  echo "[auto] ${stage}: full Zabha chunk ${chunk_idx}/${PHASE5_CHUNKS}"
   prepare_stage5_subtasks || exit $?
 
   chunk_file="${WORK_DIR}/test_list_stage5_${chunk_idx}.yaml"
@@ -434,7 +444,7 @@ PY
   fi
 
   echo "phase5_${chunk_idx}_done" > "${STATE_FILE}"
-  if [[ "${chunk_idx}" == "4" ]]; then
+  if (( chunk_idx == PHASE5_CHUNKS )); then
     echo "phase5_done" > "${STATE_FILE}"
     echo "[auto] stage5 all chunks passed. full flow complete."
   else
@@ -451,5 +461,5 @@ if [[ "${stage}" == "done" ]]; then
 fi
 
 echo "unknown stage: ${stage}"
-echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1|phase4_2|phase4_3|phase4_4|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
+echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_12|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
 exit 2

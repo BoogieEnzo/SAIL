@@ -3,6 +3,6 @@
   "allow_development": true,
   "current_stage": "M3",
   "current_task": "M3-004",
-  "updated_at": "2026-02-19T20:39:22+08:00",
-  "notes": "M3-004 auto loop now passed phase1, phase2, and phase3(wide_compat, 240 selected). Phase4/phase5 remain chunked (4-way each) for resumable execution. phase5 still blocked on this host until Zabha-capable GNU toolchain is available."
+  "updated_at": "2026-02-19T21:19:23+08:00",
+  "notes": "M3-004 loop tuning update: phase4 split granularity increased from 4 chunks to 12 chunks to reduce rework after interruption; phase5 stays 4 chunks. phase1/phase2/phase3 remain passed, and rerun can resume from phase3_done -> phase4_1."
 }
