@@ -1,0 +1,4 @@
+version = "cd86b08"
+description = "Formalisation of the linking of ELF object code, and related notions"
+requires = "linksem_zarith"
+requires(nozarith) = "linksem_num"

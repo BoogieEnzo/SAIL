@@ -1,0 +1,50 @@
+opam-version: "2.0"
+bin: "src/ott"
+share: "menhir/menhir_library_extra.mly"
+share_root: [
+  "emacs/ott-mode.el" {"emacs/site-lisp/ott-mode.el"}
+  "tex/ottlayout.sty" {"tex/ottlayout.sty"}
+]
+doc: [
+  "README.md" {"README.md"}
+  "LICENCE" {"LICENSE"}
+  "built_doc/top2.pdf" {"doc/ott_manual.pdf"}
+  "built_doc/top2.html" {"doc/ott_manual.html"}
+  "built_doc/top2001.png"
+  "built_doc/top2002.png"
+  "built_doc/top2003.png"
+  "built_doc/top2004.png"
+  "built_doc/top2005.png"
+  "built_doc/top2006.png"
+  "built_doc/top2007.png"
+  "built_doc/top2008.png"
+  "built_doc/top2009.png"
+  "built_doc/top2010.png"
+  "built_doc/top2011.png"
+  "built_doc/top2012.png"
+  "built_doc/top2013.png"
+  "built_doc/top2014.png"
+  "built_doc/top2015.png"
+  "built_doc/top2016.png"
+  "built_doc/top2017.png"
+  "built_doc/top2018.png"
+  "built_doc/top2019.png"
+  "built_doc/top2020.png"
+  "built_doc/top2021.png"
+  "built_doc/top2022.png"
+  "built_doc/top2023.png"
+  "built_doc/top2024.png"
+  "built_doc/top2025.png"
+  "built_doc/top2026.png"
+  "built_doc/top2027.png"
+  "built_doc/top2028.png"
+  "built_doc/top2029.png"
+  "built_doc/top2030.png"
+  "built_doc/top2031.png"
+  "built_doc/top2032.png"
+  "built_doc/top2033.png"
+  "built_doc/top2034.png"
+  "built_doc/top2035.png"
+  "built_doc/top2036.png"
+  "built_doc/top2037.png"
+]

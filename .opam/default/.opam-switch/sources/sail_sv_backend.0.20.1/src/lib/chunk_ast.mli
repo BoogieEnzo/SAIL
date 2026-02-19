@@ -1,0 +1,128 @@
+(****************************************************************************)
+(*     Sail                                                                 *)
+(*                                                                          *)
+(*  Sail and the Sail architecture models here, comprising all files and    *)
+(*  directories except the ASL-derived Sail code in the aarch64 directory,  *)
+(*  are subject to the BSD two-clause licence below.                        *)
+(*                                                                          *)
+(*  The ASL derived parts of the ARMv8.3 specification in                   *)
+(*  aarch64/no_vector and aarch64/full are copyright ARM Ltd.               *)
+(*                                                                          *)
+(*  Copyright (c) 2013-2021                                                 *)
+(*    Kathyrn Gray                                                          *)
+(*    Shaked Flur                                                           *)
+(*    Stephen Kell                                                          *)
+(*    Gabriel Kerneis                                                       *)
+(*    Robert Norton-Wright                                                  *)
+(*    Christopher Pulte                                                     *)
+(*    Peter Sewell                                                          *)
+(*    Alasdair Armstrong                                                    *)
+(*    Brian Campbell                                                        *)
+(*    Thomas Bauereiss                                                      *)
+(*    Anthony Fox                                                           *)
+(*    Jon French                                                            *)
+(*    Dominic Mulligan                                                      *)
+(*    Stephen Kell                                                          *)
+(*    Mark Wassell                                                          *)
+(*    Alastair Reid (Arm Ltd)                                               *)
+(*                                                                          *)
+(*  All rights reserved.                                                    *)
+(*                                                                          *)
+(*  This work was partially supported by EPSRC grant EP/K008528/1 <a        *)
+(*  href="http://www.cl.cam.ac.uk/users/pes20/rems">REMS: Rigorous          *)
+(*  Engineering for Mainstream Systems</a>, an ARM iCASE award, EPSRC IAA   *)
+(*  KTF funding, and donations from Arm.  This project has received         *)
+(*  funding from the European Research Council (ERC) under the European     *)
+(*  Union’s Horizon 2020 research and innovation programme (grant           *)
+(*  agreement No 789108, ELVER).                                            *)
+(*                                                                          *)
+(*  This software was developed by SRI International and the University of  *)
+(*  Cambridge Computer Laboratory (Department of Computer Science and       *)
+(*  Technology) under DARPA/AFRL contracts FA8650-18-C-7809 ("CIFV")        *)
+(*  and FA8750-10-C-0237 ("CTSRD").                                         *)
+(*                                                                          *)
+(*  SPDX-License-Identifier: BSD-2-Clause                                   *)
+(****************************************************************************)
+
+(** Module for breaking AST into syntactic chunks and interleaving comments.
+
+    This module is part of the Sail formatting system. It takes a parsed AST (not a desugared AST, as for formatting we
+    need to preserve as much as possible), and breaks it up into more abstract syntactic elements - 'chunks' for want of
+    a better term. *)
+
+type binder = Var_binder | Let_binder | Internal_plet_binder
+
+val binder_keyword : binder -> string
+
+type if_format = { then_brace : bool; else_brace : bool }
+
+type match_kind = Try_match | Match_match
+
+val match_keywords : match_kind -> string * string option
+
+val comment_type_delimiters : Parse_ast.comment_type -> string * string
+
+type infix_chunk = Infix_prefix of string | Infix_op of string | Infix_chunks of chunks
+
+and chunk =
+  | Comment of Parse_ast.comment_type * int * int * string * bool
+  | Doc_comment of Parse_ast.doc_comment
+  | Spacer of bool * int
+  | Attribute of string * chunks
+  | Function of {
+      id : Parse_ast.id;
+      clause : bool;
+      rec_opt : chunks option;
+      typq_opt : chunks option;
+      return_typ_opt : chunks option;
+      funcls : (chunks * pexp_chunks) list;
+      hanging : bool;
+    }
+  | Val of { id : Parse_ast.id; extern_opt : Parse_ast.extern option; typq_opt : chunks option; typ : chunks }
+  | Enum of { id : Parse_ast.id; enum_functions : chunks list option; members : chunks list }
+  | Function_typ of { mapping : bool; lhs : chunks; rhs : chunks }
+  | Exists of { vars : chunks; constr : chunks option; typ : chunks }
+  | Typ_quant of { vars : chunks; constr_opt : chunks option }
+  | App of Parse_ast.id * chunks list
+  | Field of chunks * Parse_ast.id
+  | Tuple of string * string * int * chunks list
+  | Intersperse of string * chunks list
+  | Atom of string
+  | String_literal of string
+  | Multiline_string_literal of string list
+  | Pragma of string * string
+  | Unary of string * chunks
+  | Binary of chunks * string * chunks
+  | Vector_binary of chunks * string * chunks
+  | Assign of chunks * (string * chunks) option * string * chunks
+  | Infix_sequence of infix_chunk list
+  | Index of chunks * chunks
+  | Delim of string
+  | Opt_delim of string
+  | Block of (bool * chunks list)
+  | Binder of binder * chunks * chunks * chunks
+  | Block_binder of binder * chunks * chunks
+  | If_then of bool * chunks * chunks
+  | If_then_else of if_format * chunks * chunks * chunks
+  | Struct_update of chunks * chunks list
+  | Match of { kind : match_kind; exp : chunks; aligned : bool; cases : pexp_chunks list }
+  | Foreach of {
+      var : chunks;
+      decreasing : bool;
+      from_index : chunks;
+      to_index : chunks;
+      step : chunks option;
+      body : chunks;
+    }
+  | While of { repeat_until : bool; termination_measure : chunks option; cond : chunks; body : chunks }
+  | Vector_updates of chunks * chunks list
+  | Chunks of chunks
+  | Raw of string
+
+and chunks = chunk Queue.t
+
+and pexp_chunks = { funcl_space : bool; attr : chunks option; pat : chunks; guard : chunks option; body : chunks }
+
+val prerr_chunk : string -> chunk -> unit
+
+val chunk_defs : string -> Lexer.comment list -> Parse_ast.def list -> chunks

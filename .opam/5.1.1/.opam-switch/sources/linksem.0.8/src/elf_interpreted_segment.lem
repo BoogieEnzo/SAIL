@@ -1,0 +1,136 @@
+(** [elf_interpreted_segment] defines interpreted segments, i.e. the contents of
+  * a program header table entry converted to more amenable types, and operations
+  * built on top of them.
+  *)
+
+open import Basic_classes
+open import Bool
+open import Num
+open import String
+
+open import Elf_types_native_uint
+open import Elf_program_header_table
+
+open import Byte_sequence
+open import Missing_pervasives
+open import Show
+
+open import Hex_printing
+
+(** [elf32_interpreted_segment] represents an ELF32 interpreted segment, i.e. the
+  * contents of an ELF program header table entry converted into more amenable
+  * (infinite precision) types, for manipulation.
+  * Invariant: the nth entry of the program header table corresponds to the nth
+  * entry of the list of interpreted segments in an [elf32_file] record.  The
+  * lengths of the two lists are exactly the same.
+  *)
+type elf32_interpreted_segment =
+  <| elf32_segment_body  : byte_sequence        (** Body of the segment *)
+   ; elf32_segment_type  : natural              (** Type of the segment *)
+   ; elf32_segment_size  : natural              (** Size of the segment in bytes *)
+   ; elf32_segment_memsz : natural              (** Size of the segment in memory in bytes *)
+   ; elf32_segment_base  : natural              (** Base address of the segment *)
+   ; elf32_segment_paddr : natural              (** Physical address of segment *)
+   ; elf32_segment_align : natural              (** Alignment of the segment *)
+   ; elf32_segment_offset : natural             (** Offset of the segment *)
+   ; elf32_segment_flags : (bool * bool * bool) (** READ, WRITE, EXECUTE flags. *)
+   |>
+
+(** [elf64_interpreted_segment] represents an ELF64 interpreted segment, i.e. the
+  * contents of an ELF program header table entry converted into more amenable
+  * (infinite precision) types, for manipulation.
+  * Invariant: the nth entry of the program header table corresponds to the nth
+  * entry of the list of interpreted segments in an [elf64_file] record.  The
+  * lengths of the two lists are exactly the same.
+  *)
+type elf64_interpreted_segment =
+  <| elf64_segment_body  : byte_sequence        (** Body of the segment *)
+   ; elf64_segment_type  : natural              (** Type of the segment *)
+   ; elf64_segment_size  : natural              (** Size of the segment in bytes *)
+   ; elf64_segment_memsz : natural              (** Size of the segment in memory in bytes *)
+   ; elf64_segment_base  : natural              (** Base address of the segment *)
+   ; elf64_segment_paddr : natural              (** Physical address of segment *)
+   ; elf64_segment_align : natural              (** Alignment of the segment *)
+   ; elf64_segment_offset : natural             (** Offset of the segment *)
+   ; elf64_segment_flags : (bool * bool * bool) (** READ, WRITE, EXECUTE flags. *)
+   |>
+
+(** [compare_elf64_interpreted_segment seg1 seg2] is an ordering comparison function
+  * on interpreted segments suitable for constructing sets, finite maps and other
+  * ordered data types out of.
+  *)
+val compare_elf64_interpreted_segment : elf64_interpreted_segment ->
+  elf64_interpreted_segment -> ordering
+let compare_elf64_interpreted_segment s1 s2 =
+  compare
+    (s1.elf64_segment_body,
+    [s1.elf64_segment_type  ;
+     s1.elf64_segment_size  ;
+     s1.elf64_segment_memsz ;
+     s1.elf64_segment_base  ;
+     s1.elf64_segment_paddr ;
+     s1.elf64_segment_align ;
+     s1.elf64_segment_offset],
+     let (f1, f2, f3) = s1.elf64_segment_flags in
+       List.map natural_of_bool [f1; f2; f3])
+    (s2.elf64_segment_body,
+    [s2.elf64_segment_type  ;
+     s2.elf64_segment_size  ;
+     s2.elf64_segment_memsz ;
+     s2.elf64_segment_base  ;
+     s2.elf64_segment_paddr ;
+     s2.elf64_segment_align ;
+     s2.elf64_segment_offset],
+     let (f1, f2, f3) = s2.elf64_segment_flags in
+       List.map natural_of_bool [f1; f2; f3])
+
+instance (Ord elf64_interpreted_segment)
+    let compare = compare_elf64_interpreted_segment
+    let (<) = fun f1 -> (fun f2 -> (compare_elf64_interpreted_segment f1 f2 = LT))
+    let (<=) = fun f1 -> (fun f2 -> let result = compare_elf64_interpreted_segment f1 f2 in result = LT || result = EQ)
+    let (>) = fun f1 -> (fun f2 -> (compare_elf64_interpreted_segment f1 f2 = GT))
+    let (>=) = fun f1 -> (fun f2 -> let result = compare_elf64_interpreted_segment f1 f2 in result = GT || result = EQ)
+end
+
+type elf32_interpreted_segments = list elf32_interpreted_segment
+type elf64_interpreted_segments = list elf64_interpreted_segment
+
+(** [string_of_flags bs] produces a string-based representation of an interpreted
+  * segments flags (represented as a boolean triple).
+  *)
+val string_of_flags : (bool * bool * bool) -> string
+let {ocaml} string_of_flags flags =
+  match flags with
+    | (read, write, execute) ->
+        bracket [show read; show write; show execute]
+  end
+
+(** [string_of_elf32_interpreted_segment seg] produces a string-based representation
+  * of interpreted segment [seg].
+  *)
+val string_of_elf32_interpreted_segment : elf32_interpreted_segment -> string
+let {ocaml} string_of_elf32_interpreted_segment seg =
+  unlines [
+    "Body of length: " ^ unsafe_hex_string_of_natural 16 (Byte_sequence.length seg.elf32_segment_body)
+  ; "Segment type: " ^ string_of_segment_type (fun _ -> "ABI specific") (fun _ -> "ABI specific") seg.elf32_segment_type
+  ; "Segment size: " ^ unsafe_hex_string_of_natural 16 seg.elf32_segment_size
+  ; "Segment memory size: " ^ unsafe_hex_string_of_natural 16 seg.elf32_segment_memsz
+  ; "Segment base address: " ^ unsafe_hex_string_of_natural 16 seg.elf32_segment_base
+  ; "Segment physical address: " ^ unsafe_hex_string_of_natural 16 seg.elf32_segment_paddr
+  ; "Segment flags: " ^ string_of_flags seg.elf32_segment_flags
+  ]
+
+(** [string_of_elf64_interpreted_segment seg] produces a string-based representation
+  * of interpreted segment [seg].
+  *)
+val string_of_elf64_interpreted_segment : elf64_interpreted_segment -> string
+let {ocaml} string_of_elf64_interpreted_segment seg =
+  unlines [
+    "Body of length: " ^ unsafe_hex_string_of_natural 16 (Byte_sequence.length seg.elf64_segment_body)
+  ; "Segment type: " ^ string_of_segment_type (fun _ -> "ABI specific") (fun _ -> "ABI specific") seg.elf64_segment_type
+  ; "Segment size: " ^ unsafe_hex_string_of_natural 16 seg.elf64_segment_size
+  ; "Segment memory size: " ^ unsafe_hex_string_of_natural 16 seg.elf64_segment_memsz
+  ; "Segment base address: " ^ unsafe_hex_string_of_natural 16 seg.elf64_segment_base
+  ; "Segment physical address: " ^ unsafe_hex_string_of_natural 16 seg.elf64_segment_paddr
+  ; "Segment flags: " ^ string_of_flags seg.elf64_segment_flags
+  ]

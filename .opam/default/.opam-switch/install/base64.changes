@@ -1,0 +1,31 @@
+opam-version: "2.0"
+added: [
+  "doc/base64" {"D"}
+  "doc/base64/CHANGES.md" {"F:S4112T1771433765.4"}
+  "doc/base64/LICENSE.md" {"F:S800T1771433765.4"}
+  "doc/base64/README.md" {"F:S714T1771433765.4"}
+  "lib/base64" {"D"}
+  "lib/base64/META" {"F:S429T1771433765.4"}
+  "lib/base64/base64.a" {"F:S36240T1771433765.4"}
+  "lib/base64/base64.cma" {"F:S50969T1771433765.4"}
+  "lib/base64/base64.cmi" {"F:S3104T1771433765.4"}
+  "lib/base64/base64.cmt" {"F:S122169T1771433765.4"}
+  "lib/base64/base64.cmti" {"F:S20114T1771433765.4"}
+  "lib/base64/base64.cmx" {"F:S3706T1771433765.4"}
+  "lib/base64/base64.cmxa" {"F:S756T1771433765.4"}
+  "lib/base64/base64.cmxs" {"F:S47744T1771433765.4"}
+  "lib/base64/base64.ml" {"F:S10672T1771433765.4"}
+  "lib/base64/base64.mli" {"F:S4426T1771433765.4"}
+  "lib/base64/dune-package" {"F:S1523T1771433765.4"}
+  "lib/base64/opam" {"F:S1006T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.a" {"F:S51334T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.cma" {"F:S63564T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.cmi" {"F:S2503T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.cmt" {"F:S170259T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.cmti" {"F:S19619T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.cmx" {"F:S5582T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.cmxa" {"F:S632T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.cmxs" {"F:S57456T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.ml" {"F:S15264T1771433765.4"}
+  "lib/base64/rfc2045/base64_rfc2045.mli" {"F:S4725T1771433765.4"}
+]

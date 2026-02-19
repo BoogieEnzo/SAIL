@@ -1,0 +1,5 @@
+:rewrites interpreter
+:output result
+main()
+:run
+:quit

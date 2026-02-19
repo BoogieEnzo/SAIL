@@ -1,0 +1,12 @@
+opam-version: "2.0"
+added: [
+  "bin/sail_maker" {"F:S1699928T1771434008.12"}
+  "doc/sail_maker" {"D"}
+  "doc/sail_maker/CHANGELOG.md" {"F:S20528T1771434008.12"}
+  "doc/sail_maker/LICENSE" {"F:S2594T1771434008.12"}
+  "doc/sail_maker/README.md" {"F:S22971T1771434008.12"}
+  "lib/sail_maker" {"D"}
+  "lib/sail_maker/META" {"F:S0T1771434008.12"}
+  "lib/sail_maker/dune-package" {"F:S314T1771434008.12"}
+  "lib/sail_maker/opam" {"F:S929T1771434008.12"}
+]

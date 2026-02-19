@@ -1,0 +1,5 @@
+version = ""
+description = "Lem library for extracted OCaml (using zarith)"
+requires = "zarith num"
+archive(byte) = "extract.cma"
+archive(native) = "extract.cmxa"

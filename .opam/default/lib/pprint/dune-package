@@ -1,0 +1,45 @@
+(lang dune 3.21)
+(name pprint)
+(sections (lib .) (libexec .) (doc ../../doc/pprint))
+(files
+ (lib
+  (META
+   PPrint.ml
+   PPrint.mli
+   PPrintEngine.ml
+   PPrintEngine.mli
+   dune-package
+   opam
+   pPrint.cmi
+   pPrint.cmt
+   pPrint.cmti
+   pPrint.cmx
+   pPrintEngine.cmi
+   pPrintEngine.cmt
+   pPrintEngine.cmti
+   pPrintEngine.cmx
+   pprint.a
+   pprint.cma
+   pprint.cmxa))
+ (libexec (pprint.cmxs))
+ (doc (CHANGES.md LICENSE README.md odoc-pages/index.mld)))
+(library
+ (name pprint)
+ (kind normal)
+ (archives (byte pprint.cma) (native pprint.cmxa))
+ (plugins (byte pprint.cma) (native pprint.cmxs))
+ (native_archives pprint.a)
+ (modes byte native)
+ (modules
+  (unwrapped
+   (module
+    (obj_name pPrint)
+    (visibility public)
+    (source (path PPrint) (intf (path PPrint.mli)) (impl (path PPrint.ml))))
+   (module
+    (obj_name pPrintEngine)
+    (visibility public)
+    (source
+     (path PPrintEngine)
+     (intf (path PPrintEngine.mli))
+     (impl (path PPrintEngine.ml)))))))

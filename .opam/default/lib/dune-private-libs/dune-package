@@ -1,0 +1,105 @@
+(lang dune 3.21)
+(name dune-private-libs)
+(version 3.21.1)
+(sections (lib .) (libexec .) (doc ../../doc/dune-private-libs))
+(files
+ (lib
+  (META
+   dune-package
+   dune-section/dune_section.a
+   dune-section/dune_section.cma
+   dune-section/dune_section.cmi
+   dune-section/dune_section.cmt
+   dune-section/dune_section.cmti
+   dune-section/dune_section.cmx
+   dune-section/dune_section.cmxa
+   dune-section/dune_section.ml
+   dune-section/dune_section.mli
+   meta_parser/dune_meta_parser.a
+   meta_parser/dune_meta_parser.cma
+   meta_parser/dune_meta_parser.cmi
+   meta_parser/dune_meta_parser.cmt
+   meta_parser/dune_meta_parser.cmx
+   meta_parser/dune_meta_parser.cmxa
+   meta_parser/dune_meta_parser.ml
+   meta_parser/dune_meta_parser__.cmi
+   meta_parser/dune_meta_parser__.cmt
+   meta_parser/dune_meta_parser__.cmx
+   meta_parser/dune_meta_parser__.ml
+   meta_parser/dune_meta_parser__Meta_lexer.cmi
+   meta_parser/dune_meta_parser__Meta_lexer.cmt
+   meta_parser/dune_meta_parser__Meta_lexer.cmti
+   meta_parser/dune_meta_parser__Meta_lexer.cmx
+   meta_parser/dune_meta_parser__Meta_parser.cmi
+   meta_parser/dune_meta_parser__Meta_parser.cmt
+   meta_parser/dune_meta_parser__Meta_parser.cmx
+   meta_parser/meta_lexer.ml
+   meta_parser/meta_lexer.mli
+   meta_parser/meta_parser.ml
+   opam))
+ (libexec (dune-section/dune_section.cmxs meta_parser/dune_meta_parser.cmxs))
+ (doc (CHANGES.md LICENSE.md README.md)))
+(library
+ (name dune-private-libs.dune-section)
+ (kind normal)
+ (synopsis "[Internal] section definition")
+ (archives
+  (byte dune-section/dune_section.cma)
+  (native dune-section/dune_section.cmxa))
+ (plugins
+  (byte dune-section/dune_section.cma)
+  (native dune-section/dune_section.cmxs))
+ (native_archives dune-section/dune_section.a)
+ (main_module_name Dune_section)
+ (modes byte native)
+ (modules
+  (singleton
+   (obj_name dune_section)
+   (visibility public)
+   (source
+    (path Dune_section)
+    (intf (path dune-section/dune_section.mli))
+    (impl (path dune-section/dune_section.ml))))))
+(library
+ (name dune-private-libs.meta_parser)
+ (kind normal)
+ (synopsis "[Internal] findlib META parser")
+ (archives
+  (byte meta_parser/dune_meta_parser.cma)
+  (native meta_parser/dune_meta_parser.cmxa))
+ (plugins
+  (byte meta_parser/dune_meta_parser.cma)
+  (native meta_parser/dune_meta_parser.cmxs))
+ (native_archives meta_parser/dune_meta_parser.a)
+ (main_module_name Dune_meta_parser)
+ (modes byte native)
+ (modules
+  (wrapped
+   (group
+    (alias
+     (obj_name dune_meta_parser__)
+     (visibility public)
+     (kind alias)
+     (source
+      (path Dune_meta_parser__)
+      (impl (path meta_parser/dune_meta_parser__.ml-gen))))
+    (name Dune_meta_parser)
+    (modules
+     (module
+      (obj_name dune_meta_parser)
+      (visibility public)
+      (source
+       (path Dune_meta_parser)
+       (impl (path meta_parser/dune_meta_parser.ml))))
+     (module
+      (obj_name dune_meta_parser__Meta_lexer)
+      (visibility public)
+      (source
+       (path Meta_lexer)
+       (intf (path meta_parser/meta_lexer.mli))
+       (impl (path meta_parser/meta_lexer.ml))))
+     (module
+      (obj_name dune_meta_parser__Meta_parser)
+      (visibility public)
+      (source (path Meta_parser) (impl (path meta_parser/meta_parser.ml))))))
+   (wrapped true))))

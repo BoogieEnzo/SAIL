@@ -1,0 +1,4 @@
+ocamlc -output-complete-exe -intf-suffix .dummy -g -o .duneboot.exe -I boot -I +unix unix.cma boot/types.ml boot/libs.ml boot/duneboot.ml
+./.duneboot.exe -j 1
+cd _boot && ccache -c blake3_sse41_x86-64_unix.S -o blake3_sse41_x86-64_unix.o
+ccache: error: missing equal sign in "blake3_sse41_x86-64_unix.o"

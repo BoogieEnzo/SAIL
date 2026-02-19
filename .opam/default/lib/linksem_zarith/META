@@ -1,0 +1,5 @@
+version = "cd86b08"
+description = "Formalisation of the linking of ELF object code, and related notions (using the zarith library)"
+requires = "num lem_zarith str unix"
+archive(byte) = "linksem.cma"
+archive(native) = "linksem.cmxa"

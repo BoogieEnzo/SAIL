@@ -1,0 +1,7 @@
+version = "1.3.2"
+description = ""
+requires = "bigarray bytes"
+archive(byte) = "omd.cma"
+archive(native) = "omd.cmxa"
+plugin(byte) = "omd.cma"
+plugin(native) = "omd.cmxs"

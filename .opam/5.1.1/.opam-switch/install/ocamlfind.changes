@@ -1,0 +1,46 @@
+opam-version: "2.0"
+added: [
+  "bin/ocamlfind" {"F:S4117168T1771434827.97"}
+  "bin/safe_camlp4" {"F:S1039T1771434827.98"}
+  "lib/bytes" {"D"}
+  "lib/bytes/META" {"F:S145T1771434827.91"}
+  "lib/findlib" {"D"}
+  "lib/findlib.conf" {"F:S217T1771434827.83"}
+  "lib/findlib/META" {"F:S983T1771434827.88"}
+  "lib/findlib/Makefile.config" {"F:S1128T1771434827.88"}
+  "lib/findlib/Makefile.packages" {"F:S21T1771434827.92"}
+  "lib/findlib/findlib.a" {"F:S407386T1771434827.88"}
+  "lib/findlib/findlib.cma" {"F:S197628T1771434827.88"}
+  "lib/findlib/findlib.cmi" {"F:S2236T1771434827.88"}
+  "lib/findlib/findlib.cmxa" {"F:S6736T1771434827.88"}
+  "lib/findlib/findlib.cmxs" {"F:S319496T1771434827.88"}
+  "lib/findlib/findlib.mli" {"F:S11476T1771434827.88"}
+  "lib/findlib/findlib_config.cmi" {"F:S1564T1771434827.88"}
+  "lib/findlib/findlib_config.ml" {"F:S3161T1771434827.88"}
+  "lib/findlib/findlib_dynload.a" {"F:S12812T1771434827.88"}
+  "lib/findlib/findlib_dynload.cma" {"F:S5501T1771434827.88"}
+  "lib/findlib/findlib_dynload.cmxa" {"F:S754T1771434827.88"}
+  "lib/findlib/findlib_dynload.cmxs" {"F:S26432T1771434827.88"}
+  "lib/findlib/findlib_top.a" {"F:S54272T1771434827.88"}
+  "lib/findlib/findlib_top.cma" {"F:S20190T1771434827.88"}
+  "lib/findlib/findlib_top.cmxa" {"F:S2087T1771434827.88"}
+  "lib/findlib/findlib_top.cmxs" {"F:S53656T1771434827.88"}
+  "lib/findlib/fl_args.cmi" {"F:S813T1771434827.88"}
+  "lib/findlib/fl_dynload.cmi" {"F:S389T1771434827.88"}
+  "lib/findlib/fl_dynload.mli" {"F:S1684T1771434827.88"}
+  "lib/findlib/fl_lint.cmi" {"F:S5456T1771434827.88"}
+  "lib/findlib/fl_meta.cmi" {"F:S664T1771434827.88"}
+  "lib/findlib/fl_metascanner.cmi" {"F:S1222T1771434827.88"}
+  "lib/findlib/fl_metascanner.mli" {"F:S3587T1771434827.88"}
+  "lib/findlib/fl_metatoken.cmi" {"F:S750T1771434827.88"}
+  "lib/findlib/fl_package_base.cmi" {"F:S1395T1771434827.88"}
+  "lib/findlib/fl_package_base.mli" {"F:S6890T1771434827.88"}
+  "lib/findlib/fl_split.cmi" {"F:S789T1771434827.88"}
+  "lib/findlib/fl_topo.cmi" {"F:S1696T1771434827.88"}
+  "lib/findlib/ocaml_args.cmi" {"F:S624T1771434827.88"}
+  "lib/findlib/topfind.cmi" {"F:S732T1771434827.88"}
+  "lib/findlib/topfind.mli" {"F:S4107T1771434827.88"}
+  "lib/ocaml/topfind" {"F:S4438T1771434827.87"}
+  "lib/toplevel/topfind" {"F:S4438T1771434827.98"}
+]
+perm-changed: "lib/ocaml" {"D"}

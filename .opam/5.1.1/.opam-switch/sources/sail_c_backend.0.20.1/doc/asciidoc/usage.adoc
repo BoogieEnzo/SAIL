@@ -1,0 +1,291 @@
+In its most basic use-case Sail is a command-line tool, analogous to
+a compiler: one gives it a list of input Sail files; it type-checks
+them and provides translated output.
+
+To simply typecheck Sail files, one can pass them on the command line
+with no other options, for example:
+[source,sh]
+----
+sail prelude.sail riscv_types.sail riscv_mem.sail riscv_sys.sail riscv_vmem.sail riscv.sail
+----
+The sail files passed on the command line are simply treated as if
+they are one large file concatenated together, although the parser
+will keep track of locations on a per-file basis for
+error-reporting. As can be seen, this specification is split into
+several logical components. `prelude.sail` defines the initial
+type environment and builtins, `riscv_types.sail` gives type
+definitions used in the rest of the specification, `riscv_mem.sail`
+and `riscv_vmem.sail` describe the physical and virtual memory
+interaction, and then `riscv_sys.sail` and `riscv.sail`
+implement most of the specification.
+
+One can use also use `$include` directives in Sail source, for
+example:
+[source,sail]
+----
+$include <library.sail>
+$include "file.sail"
+----
+
+Here, Sail will look for `library.sail` in the `$SAIL_DIR/lib`
+directory, where `$SAIL_DIR` is usually the root of the sail
+repository (or `opam var sail:share` when Sail is installed using
+opam). It will search for `file.sail` relative to the location of the
+file containing the `$include`. The space after the `$include` before
+the filename is mandatory. Sail also supports `$define`, `$ifdef`, and
+`$ifndef` for basic conditional compilation. These are things that are
+understood by Sail itself, not a separate preprocessor, and are
+handled after the AST is parsed.
+
+For more complex projects, a module hierarchy can be defined. See the
+<<Modules>> section for details.
+
+=== Sail options
+
+For backwards compatibility reasons, Sail accepts arguments of the
+form `-long_opt`, i.e. leading with a single `-` and words
+separated by `_`. Such an option will be treated the same as
+`--long-opt`.
+
+For a list of all options, one can call Sail as `sail --help`.
+
+<<<
+=== C compilation
+
+To compile Sail into C, the `-c` option is used, like so:
+[source,sh]
+----
+sail -c FILES 1> out.c
+----
+The translated C is by default printed to stdout, but one can also use
+the `-o` option to output to a file, so
+[source,sh]
+----
+sail -c FILES -o out
+----
+will generate a file called `out.c`. To produce an executable
+this needs to be compiled and linked with the C files in the
+`$SAIL_DIR/lib` directory:
+[source,sh]
+----
+gcc out.c $SAIL_DIR/lib/*.c -lgmp -I $SAIL_DIR/lib/ -o out
+----
+The C output requires the https://gmplib.org/[GMP library] for arbitrary precision
+arithmetic.
+
+There are several Sail options that affect the C output:
+
+* `-O` turns on optimisations. The generated C code will be quite slow
+    unless this flag is set.
+
+* `--Oconstant-fold` apply constant folding optimisations.
+
+* `--c-include` Supply additional header files to be included in the
+    generated C.
+
+* `--c-no-main` Do not generate a `main()` function.
+
+<<<
+=== SystemVerilog compilation (Experimental)
+
+CAUTION: This feature is new and experimental, so it is not guaranteed
+to provide working SystemVerilog. Furthermore, it is intended for
+hardware model checking against a hand-written design. Sail is not a
+hardware description language!
+
+To compile Sail into SystemVerilog, the `--sv` option is used. The `-o`
+option provides a prefix that is used on the various generated files.
+
+There are several options for the SystemVerilog output:
+
+* `--sv-output-dir` Generate all files in the specified directory
+
+* `--sv-include` Add an include directive to the generated SystemVerilog
+
+* `--sv-verilate` Can be used as either `--sv-verilate run` or
+  `--sv-verilate compile`. If used Sail will automatically invoke
+  https://www.veripool.org/verilator/[verilator] on the generated
+  SystemVerilog
+
+
+* `--sv-lines` Output SystemVerilog `line directives to aid debugging.
+
+* `--sv-int-size` Set the maximum integer size allowed in the specification.
+
+* `--sv-bits-size` Bound the maximum bitvector width on the generated SystemVerilog.
+
+* `--sv-specialize` The `--sv-specialize n` option will perform `n`
+  rounds of specialisation on the Sail code before generating
+  SystemVerilog. This will make bitvectors more monomorphic, but at
+  the cost of code duplication.
+
+The are various other options that control various minutae about the
+generated SystemVerilog, see `sail --help` for more details.
+
+
+<<<
+=== Automatic formatting (Experimental)
+
+CAUTION: This feature is new and experimental, so be sure to inspect
+changes to source made by the tool and use at your own risk!
+
+Sail supports automatic code formatting similar to tools like `go fmt`
+or `rustfmt`. This is built into Sail itself, and can be used via the
+`--fmt` flag. To format a file `my_file.sail`, we would use the command:
+[source,sh]
+----
+sail --fmt my_file.sail
+----
+
+Note that Sail does not attempt to type-check files when formatting
+them, so in this case we do not necessarily have to pass the other
+files that `my_file.sail` would otherwise require to
+type-check. However, it is perfectly fine to pass multiple files like
+so:
+[source,sh]
+----
+sail --fmt file1.sail file2.sail file3.sail
+----
+
+The one exception is if a file uses a custom infix operator, then the
+file that declares that operator must be passed before any file that
+uses it. So if `my_file.sail` uses an operator declared in
+`operator.sail` (otherwise it would not be able to parenthesize infix
+expressions correctly), we would be required to do:
+[source,sh]
+----
+sail --fmt operator.sail my_file.sail
+----
+This will format both files. If we want to avoid formatting
+`operator.sail`, we could either use `--fmt-skip`, like so:
+[source,sh]
+----
+sail --fmt-skip operator.sail --fmt operator.sail my_file.sail
+----
+or the `--fmt-only` option, like so:
+[source,sh]
+----
+sail --fmt-only my_file.sail --fmt operator.sail my_file.sail
+----
+Both of these options can be passed multiple times if required.
+
+Formatting configuration is done using a JSON configuration file:
+as:
+[source,json]
+----
+include::../../test/format/default/config.json[]
+----
+which is passed to sail with the `--config` flag.
+
+The various keys supported under the `"fmt"` key are as follows:
+
+* `indent` The default indentation level
+
+* `preserve_structure` Preserve the structure of the syntax tree as
+  much as possible. Note that the use of this operation is not
+  recommended as it inhibits many formatting options, such as
+  inserting blocks on if statements and loops.
+
+* `line_width` The desired maximum line-width. Note that this is a
+  soft limit, and the line-width can go beyond if there are no
+  possible line break options (e.g. if you have _extremely_ long
+  identifiers).
+
+* `ribbon_width` A soft limit on what proportion (between 0.0 and 1.0)
+  of the line should be non-whitespace. A value of 1.0 indicates that the
+  entirity of `line_width` can be taken up by non-whitespace.
+
+If this file is not passed on the command line, Sail will check the
+`$SAIL_CONFIG` environment variable, and if that is unset it will
+search for a file named `sail_config.json` in the current working
+directory, then recursively backwards through parent directories.
+
+<<<
+=== Interactive mode
+
+Sail has a GHCi-style interactive interpreter. This can be used by
+starting Sail with `sail -i`.  Sail will still handle any other
+command line arguments as per usual. To use Sail files within the
+interpreter they must be passed on the command line as if they were
+being compiled normally. One can also pass a list of commands to the
+interpreter by using the `--is` flag, as
+[source,sh]
+----
+sail --is <file>
+----
+where `<file>` contains a list of commands. Once inside the
+interactive mode, a list of available commands can be accessed by
+typing `:commands`, while `:help <command>` can be used to provide
+some documentation for each command.
+
+<<<
+=== Other options
+
+Here we summarize most of the other options available for
+Sail. Debugging options (usually for debugging Sail itself) are
+indicated by starting with the letter `d`.
+
+* `-v` Print the Sail version.
+
+* `-help` Print a list of options.
+
+* `--no-warn` Turn off warnings.
+
+* `--enum-casts` Allow elements of enumerations to be
+  automatically cast to numbers.
+
+* `--memo-z3` Memoize calls to the Z3 solver. This can greatly improve
+  typechecking times if you are repeatedly typechecking the same
+  specification while developing it.
+
+* `--no-lexp-bounds-check` Turn off bounds checking in the left hand
+  side of assignments. This option only exists for some Sail translated
+  from ASL (as ASL does not do compile-time bounds checking here).
+
+* `--just-check` Force Sail to terminate immediately after
+  typechecking.
+
+* `--require-version`. Check that the Sail version is newer than the
+  specified version, if not Sail will print an error and exit with a
+  non-zero exit code.
+
+<<<
+=== Debug options
+
+These options are mostly used for debugging the Sail compiler itself.
+They are included as they might be useful for those writing custom Sail
+plugins. These options are all prefixed with `d`.
+
+* `--dtc-verbose <verbosity>` Make the typechecker print a
+  trace of typing judgements. If the verbosity level is 1, then this
+  should only include fairly readable judgements about checking and
+  inference rules. If verbosity is 2 then it will include a large
+  amount of debugging information. This option can be useful to
+  diagnose tricky type-errors, especially if the error message isn't
+  very good.
+
+* `--ddump-initial-ast` Write the AST out immediately after parsing
+  and desugaring.
+
+* `--ddump-tc-ast` Write the typechecked AST to stdout after
+  typechecking
+
+* `--ddump-side-effects` Print inferred information about function
+  side effects
+
+* `--ddump-rewrite-ast <prefix>` Write the AST out after each
+  re-writing pass. The output from each pass is placed in a file
+  starting with `prefix`.
+
+=== Passing options via SAIL_FLAGS
+
+The `SAIL_FLAGS` environment variable can be used to pass additional
+flags to Sail without passing them directly on the command line. The
+arguments contained in this variable are separated by spaces (multiple
+spaces will be treated as a single separator). For more robust
+splitting of arguments, the `SAIL_ENCODED_FLAGS` environment variable
+can be used instead. Here, arguments are separated by the ASCII unit
+separator control character `0x1f`, and are then passed unmodified
+without any trimming of whitespace. If set the `SAIL_ENCODED_FLAGS`
+variable will take precedence and the `SAIL_FLAGS` variable will be
+ignored.

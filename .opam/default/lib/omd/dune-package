@@ -1,0 +1,142 @@
+(lang dune 3.21)
+(name omd)
+(version 1.3.2)
+(sections (lib .) (libexec .) (bin ../../bin) (doc ../../doc/omd))
+(files
+ (lib
+  (META
+   dune-package
+   html_characters.cmi
+   html_characters.cmt
+   html_characters.cmx
+   html_characters.ml
+   omd.a
+   omd.cma
+   omd.cmi
+   omd.cmt
+   omd.cmti
+   omd.cmx
+   omd.cmxa
+   omd.ml
+   omd.mli
+   omd_backend.cmi
+   omd_backend.cmt
+   omd_backend.cmti
+   omd_backend.cmx
+   omd_backend.ml
+   omd_backend.mli
+   omd_html.cmi
+   omd_html.cmt
+   omd_html.cmx
+   omd_html.ml
+   omd_lexer.cmi
+   omd_lexer.cmt
+   omd_lexer.cmti
+   omd_lexer.cmx
+   omd_lexer.ml
+   omd_lexer.mli
+   omd_lexer_fs.cmi
+   omd_lexer_fs.cmt
+   omd_lexer_fs.cmti
+   omd_lexer_fs.cmx
+   omd_lexer_fs.ml
+   omd_lexer_fs.mli
+   omd_parser.cmi
+   omd_parser.cmt
+   omd_parser.cmti
+   omd_parser.cmx
+   omd_parser.ml
+   omd_parser.mli
+   omd_representation.cmi
+   omd_representation.cmt
+   omd_representation.cmti
+   omd_representation.cmx
+   omd_representation.ml
+   omd_representation.mli
+   omd_utils.cmi
+   omd_utils.cmt
+   omd_utils.cmti
+   omd_utils.cmx
+   omd_utils.ml
+   omd_utils.mli
+   omd_xtxt.cmi
+   omd_xtxt.cmt
+   omd_xtxt.cmti
+   omd_xtxt.cmx
+   omd_xtxt.ml
+   omd_xtxt.mli
+   opam))
+ (libexec (omd.cmxs))
+ (bin (omd))
+ (doc (CHANGES.md README.md)))
+(library
+ (name omd)
+ (kind normal)
+ (archives (byte omd.cma) (native omd.cmxa))
+ (plugins (byte omd.cma) (native omd.cmxs))
+ (native_archives omd.a)
+ (requires bigarray bytes)
+ (modes byte native)
+ (modules
+  (unwrapped
+   (module
+    (obj_name html_characters)
+    (visibility public)
+    (source (path Html_characters) (impl (path html_characters.ml))))
+   (module
+    (obj_name omd)
+    (visibility public)
+    (source (path Omd) (intf (path omd.mli)) (impl (path omd.ml))))
+   (module
+    (obj_name omd_backend)
+    (visibility public)
+    (source
+     (path Omd_backend)
+     (intf (path omd_backend.mli))
+     (impl (path omd_backend.ml))))
+   (module
+    (obj_name omd_html)
+    (visibility public)
+    (source (path Omd_html) (impl (path omd_html.ml))))
+   (module
+    (obj_name omd_lexer)
+    (visibility public)
+    (source
+     (path Omd_lexer)
+     (intf (path omd_lexer.mli))
+     (impl (path omd_lexer.ml))))
+   (module
+    (obj_name omd_lexer_fs)
+    (visibility public)
+    (source
+     (path Omd_lexer_fs)
+     (intf (path omd_lexer_fs.mli))
+     (impl (path omd_lexer_fs.ml))))
+   (module
+    (obj_name omd_parser)
+    (visibility public)
+    (source
+     (path Omd_parser)
+     (intf (path omd_parser.mli))
+     (impl (path omd_parser.ml))))
+   (module
+    (obj_name omd_representation)
+    (visibility public)
+    (source
+     (path Omd_representation)
+     (intf (path omd_representation.mli))
+     (impl (path omd_representation.ml))))
+   (module
+    (obj_name omd_utils)
+    (visibility public)
+    (source
+     (path Omd_utils)
+     (intf (path omd_utils.mli))
+     (impl (path omd_utils.ml))))
+   (module
+    (obj_name omd_xtxt)
+    (visibility public)
+    (source
+     (path Omd_xtxt)
+     (intf (path omd_xtxt.mli))
+     (impl (path omd_xtxt.ml)))))))

@@ -1,0 +1,363 @@
+(****************************************************************************)
+(*     Sail                                                                 *)
+(*                                                                          *)
+(*  Sail and the Sail architecture models here, comprising all files and    *)
+(*  directories except the ASL-derived Sail code in the aarch64 directory,  *)
+(*  are subject to the BSD two-clause licence below.                        *)
+(*                                                                          *)
+(*  The ASL derived parts of the ARMv8.3 specification in                   *)
+(*  aarch64/no_vector and aarch64/full are copyright ARM Ltd.               *)
+(*                                                                          *)
+(*  Copyright (c) 2013-2021                                                 *)
+(*    Kathyrn Gray                                                          *)
+(*    Shaked Flur                                                           *)
+(*    Stephen Kell                                                          *)
+(*    Gabriel Kerneis                                                       *)
+(*    Robert Norton-Wright                                                  *)
+(*    Christopher Pulte                                                     *)
+(*    Peter Sewell                                                          *)
+(*    Alasdair Armstrong                                                    *)
+(*    Brian Campbell                                                        *)
+(*    Thomas Bauereiss                                                      *)
+(*    Anthony Fox                                                           *)
+(*    Jon French                                                            *)
+(*    Dominic Mulligan                                                      *)
+(*    Stephen Kell                                                          *)
+(*    Mark Wassell                                                          *)
+(*    Alastair Reid (Arm Ltd)                                               *)
+(*                                                                          *)
+(*  All rights reserved.                                                    *)
+(*                                                                          *)
+(*  This work was partially supported by EPSRC grant EP/K008528/1 <a        *)
+(*  href="http://www.cl.cam.ac.uk/users/pes20/rems">REMS: Rigorous          *)
+(*  Engineering for Mainstream Systems</a>, an ARM iCASE award, EPSRC IAA   *)
+(*  KTF funding, and donations from Arm.  This project has received         *)
+(*  funding from the European Research Council (ERC) under the European     *)
+(*  Union’s Horizon 2020 research and innovation programme (grant           *)
+(*  agreement No 789108, ELVER).                                            *)
+(*                                                                          *)
+(*  This software was developed by SRI International and the University of  *)
+(*  Cambridge Computer Laboratory (Department of Computer Science and       *)
+(*  Technology) under DARPA/AFRL contracts FA8650-18-C-7809 ("CIFV")        *)
+(*  and FA8750-10-C-0237 ("CTSRD").                                         *)
+(*                                                                          *)
+(*  SPDX-License-Identifier: BSD-2-Clause                                   *)
+(****************************************************************************)
+
+(** General rewriting framework for Sail to Sail rewrites *)
+
+module Big_int = Nat_big_num
+open Ast
+open Ast_defs
+open Type_check
+
+type ('a, 'b) rewriters = {
+  rewrite_exp : ('a, 'b) rewriters -> 'a exp -> 'a exp;
+  rewrite_lexp : ('a, 'b) rewriters -> 'a lexp -> 'a lexp;
+  rewrite_pat : ('a, 'b) rewriters -> 'a pat -> 'a pat;
+  rewrite_mpat : ('a, 'b) rewriters -> 'a mpat -> 'a mpat;
+  rewrite_let : ('a, 'b) rewriters -> 'a letbind -> 'a letbind;
+  rewrite_fun : ('a, 'b) rewriters -> 'a fundef -> 'a fundef;
+  rewrite_def : ('a, 'b) rewriters -> ('a, 'b) def -> ('a, 'b) def;
+  rewrite_ast : ('a, 'b) rewriters -> ('a, 'b) ast -> ('a, 'b) ast;
+}
+
+val rewrite_exp : (tannot, env) rewriters -> tannot exp -> tannot exp
+
+val rewriters_base : (tannot, env) rewriters
+
+(** The identity re-writer *)
+val rewrite_ast : typed_ast -> typed_ast
+
+val rewrite_ast_defs : (tannot, env) rewriters -> typed_def list -> typed_def list
+
+val rewrite_ast_base : (tannot, env) rewriters -> typed_ast -> typed_ast
+
+(** Same as rewrite_defs_base but display a progress bar when verbosity >= 1 *)
+val rewrite_ast_base_progress : string -> (tannot, env) rewriters -> typed_ast -> typed_ast
+
+val rewrite_lexp : (tannot, env) rewriters -> tannot lexp -> tannot lexp
+
+val rewrite_pat : (tannot, env) rewriters -> tannot pat -> tannot pat
+
+val rewrite_mpat : (tannot, env) rewriters -> tannot mpat -> tannot mpat
+
+val rewrite_pexp : (tannot, env) rewriters -> tannot pexp -> tannot pexp
+
+val rewrite_let : (tannot, env) rewriters -> tannot letbind -> tannot letbind
+
+val rewrite_def : (tannot, env) rewriters -> typed_def -> typed_def
+
+val rewrite_fun : (tannot, env) rewriters -> tannot fundef -> tannot fundef
+
+val rewrite_mapdef : (tannot, env) rewriters -> tannot mapdef -> tannot mapdef
+
+(** the type of interpretations of patterns *)
+type ('a, 'pat, 'pat_aux) pat_alg = {
+  p_lit : lit -> 'pat_aux;
+  p_wild : 'pat_aux;
+  p_or : 'pat * 'pat -> 'pat_aux;
+  p_not : 'pat -> 'pat_aux;
+  p_as : 'pat * id -> 'pat_aux;
+  p_typ : Ast.typ * 'pat -> 'pat_aux;
+  p_id : id -> 'pat_aux;
+  p_var : 'pat * typ_pat -> 'pat_aux;
+  p_app : id * 'pat list -> 'pat_aux;
+  p_vector : 'pat list -> 'pat_aux;
+  p_vector_concat : 'pat list -> 'pat_aux;
+  p_vector_subrange : id * Big_int.num * Big_int.num -> 'pat_aux;
+  p_tuple : 'pat list -> 'pat_aux;
+  p_list : 'pat list -> 'pat_aux;
+  p_cons : 'pat * 'pat -> 'pat_aux;
+  p_string_append : 'pat list -> 'pat_aux;
+  p_struct : struct_name * (id * 'pat) list * field_pat_wildcard -> 'pat_aux;
+  p_aux : 'pat_aux * 'a annot -> 'pat;
+}
+
+(** the type of interpretations of expressions *)
+type ( 'a,
+       'exp,
+       'exp_aux,
+       'lexp,
+       'lexp_aux,
+       'fexp,
+       'fexp_aux,
+       'opt_default_aux,
+       'opt_default,
+       'pexp,
+       'pexp_aux,
+       'letbind_aux,
+       'letbind,
+       'pat,
+       'pat_aux
+     )
+     exp_alg = {
+  e_block : 'exp list -> 'exp_aux;
+  e_id : id -> 'exp_aux;
+  e_ref : id -> 'exp_aux;
+  e_lit : lit -> 'exp_aux;
+  e_typ : Ast.typ * 'exp -> 'exp_aux;
+  e_app : id * 'exp list -> 'exp_aux;
+  e_tuple : 'exp list -> 'exp_aux;
+  e_if : 'exp * 'exp * 'exp -> 'exp_aux;
+  e_for : id * 'exp * 'exp * 'exp * Ast.order * 'exp -> 'exp_aux;
+  e_loop : loop * ('exp option * Parse_ast.l) * 'exp * 'exp -> 'exp_aux;
+  e_vector : 'exp list -> 'exp_aux;
+  e_vector_append : 'exp * 'exp -> 'exp_aux;
+  e_list : 'exp list -> 'exp_aux;
+  e_cons : 'exp * 'exp -> 'exp_aux;
+  e_struct : struct_name * 'fexp list -> 'exp_aux;
+  e_struct_update : 'exp * 'fexp list -> 'exp_aux;
+  e_field : 'exp * id -> 'exp_aux;
+  e_case : 'exp * 'pexp list -> 'exp_aux;
+  e_try : 'exp * 'pexp list -> 'exp_aux;
+  e_let : 'letbind * 'exp -> 'exp_aux;
+  e_assign : 'lexp * 'exp -> 'exp_aux;
+  e_sizeof : nexp -> 'exp_aux;
+  e_constraint : n_constraint -> 'exp_aux;
+  e_exit : 'exp -> 'exp_aux;
+  e_throw : 'exp -> 'exp_aux;
+  e_config : string list -> 'exp_aux;
+  e_return : 'exp -> 'exp_aux;
+  e_assert : 'exp * 'exp -> 'exp_aux;
+  e_var : 'lexp * 'exp * 'exp -> 'exp_aux;
+  e_internal_plet : 'pat * 'exp * 'exp -> 'exp_aux;
+  e_internal_return : 'exp -> 'exp_aux;
+  e_internal_value : Value_type.value -> 'exp_aux;
+  e_internal_assume : n_constraint * 'exp -> 'exp_aux;
+  e_aux : 'exp_aux * 'a annot -> 'exp;
+  le_id : id -> 'lexp_aux;
+  le_deref : 'exp -> 'lexp_aux;
+  le_app : id * 'exp list -> 'lexp_aux;
+  le_typ : Ast.typ * id -> 'lexp_aux;
+  le_tuple : 'lexp list -> 'lexp_aux;
+  le_vector : 'lexp * 'exp -> 'lexp_aux;
+  le_vector_range : 'lexp * 'exp * 'exp -> 'lexp_aux;
+  le_vector_concat : 'lexp list -> 'lexp_aux;
+  le_field : 'lexp * id -> 'lexp_aux;
+  le_aux : 'lexp_aux * 'a annot -> 'lexp;
+  fe_fexp : id * 'exp -> 'fexp_aux;
+  fe_aux : 'fexp_aux * 'a annot -> 'fexp;
+  def_val_empty : 'opt_default_aux;
+  def_val_dec : 'exp -> 'opt_default_aux;
+  def_val_aux : 'opt_default_aux * 'a annot -> 'opt_default;
+  pat_exp : 'pat * 'exp -> 'pexp_aux;
+  pat_when : 'pat * 'exp * 'exp -> 'pexp_aux;
+  pat_aux : 'pexp_aux * 'a annot -> 'pexp;
+  lb_val : 'pat * 'exp -> 'letbind_aux;
+  lb_aux : 'letbind_aux * 'a annot -> 'letbind;
+  pat_alg : ('a, 'pat, 'pat_aux) pat_alg;
+}
+
+(* fold over patterns *)
+val fold_pat : ('a, 'pat, 'pat_aux) pat_alg -> 'a pat -> 'pat
+
+val fold_mpat : ('a, 'mpat, 'mpat_aux) pat_alg -> 'a mpat -> 'mpat
+
+(* fold over expressions *)
+val fold_exp :
+  ( 'a,
+    'exp,
+    'exp_aux,
+    'lexp,
+    'lexp_aux,
+    'fexp,
+    'fexp_aux,
+    'opt_default_aux,
+    'opt_default,
+    'pexp,
+    'pexp_aux,
+    'letbind_aux,
+    'letbind,
+    'pat,
+    'pat_aux
+  )
+  exp_alg ->
+  'a exp ->
+  'exp
+
+val fold_letbind :
+  ( 'a,
+    'exp,
+    'exp_aux,
+    'lexp,
+    'lexp_aux,
+    'fexp,
+    'fexp_aux,
+    'opt_default_aux,
+    'opt_default,
+    'pexp,
+    'pexp_aux,
+    'letbind_aux,
+    'letbind,
+    'pat,
+    'pat_aux
+  )
+  exp_alg ->
+  'a letbind ->
+  'letbind
+
+val fold_pexp :
+  ( 'a,
+    'exp,
+    'exp_aux,
+    'lexp,
+    'lexp_aux,
+    'fexp,
+    'fexp_aux,
+    'opt_default_aux,
+    'opt_default,
+    'pexp,
+    'pexp_aux,
+    'letbind_aux,
+    'letbind,
+    'pat,
+    'pat_aux
+  )
+  exp_alg ->
+  'a pexp ->
+  'pexp
+
+val fold_funcl :
+  ( 'a,
+    'exp,
+    'exp_aux,
+    'lexp,
+    'lexp_aux,
+    'fexp,
+    'fexp_aux,
+    'opt_default_aux,
+    'opt_default,
+    'a pexp,
+    'pexp_aux,
+    'letbind_aux,
+    'letbind,
+    'pat,
+    'pat_aux
+  )
+  exp_alg ->
+  'a funcl ->
+  'a funcl
+
+val fold_function :
+  ( 'a,
+    'exp,
+    'exp_aux,
+    'lexp,
+    'lexp_aux,
+    'fexp,
+    'fexp_aux,
+    'opt_default_aux,
+    'opt_default,
+    'a pexp,
+    'pexp_aux,
+    'letbind_aux,
+    'letbind,
+    'pat,
+    'pat_aux
+  )
+  exp_alg ->
+  'a fundef ->
+  'a fundef
+
+val id_pat_alg : ('a, 'a pat, 'a pat_aux) pat_alg
+
+val id_mpat_alg : ('a, 'a mpat option, 'a mpat_aux option) pat_alg
+
+val id_exp_alg :
+  ( 'a,
+    'a exp,
+    'a exp_aux,
+    'a lexp,
+    'a lexp_aux,
+    'a fexp,
+    'a fexp_aux,
+    'a opt_default_aux,
+    'a opt_default,
+    'a pexp,
+    'a pexp_aux,
+    'a letbind_aux,
+    'a letbind,
+    'a pat,
+    'a pat_aux
+  )
+  exp_alg
+
+val compute_pat_alg : 'b -> ('b -> 'b -> 'b) -> ('a, 'b * 'a pat, 'b * 'a pat_aux) pat_alg
+
+val compute_exp_alg :
+  'b ->
+  ('b -> 'b -> 'b) ->
+  ( 'a,
+    'b * 'a exp,
+    'b * 'a exp_aux,
+    'b * 'a lexp,
+    'b * 'a lexp_aux,
+    'b * 'a fexp,
+    'b * 'a fexp_aux,
+    'b * 'a opt_default_aux,
+    'b * 'a opt_default,
+    'b * 'a pexp,
+    'b * 'a pexp_aux,
+    'b * 'a letbind_aux,
+    'b * 'a letbind,
+    'b * 'a pat,
+    'b * 'a pat_aux
+  )
+  exp_alg
+
+val pure_pat_alg : 'b -> ('b -> 'b -> 'b) -> ('a, 'b, 'b) pat_alg
+
+val pure_exp_alg : 'b -> ('b -> 'b -> 'b) -> ('a, 'b, 'b, 'b, 'b, 'b, 'b, 'b, 'b, 'b, 'b, 'b, 'b, 'b, 'b) exp_alg
+
+val add_p_typ : Env.t -> typ -> 'a pat -> 'a pat
+
+val add_e_typ : Env.t -> typ -> 'a exp -> 'a exp
+
+val add_typs_let : Env.t -> typ -> typ -> 'a exp -> 'a exp
+
+val has_early_return : 'a exp -> bool
+
+(* In-order fold over expressions *)
+val foldin_exp : (('a -> 'b exp -> 'a * 'b exp) -> 'a -> 'b exp -> 'a * 'b exp) -> 'a -> 'b exp -> 'a * 'b exp
+val foldin_pexp : (('a -> 'b exp -> 'a * 'b exp) -> 'a -> 'b exp -> 'a * 'b exp) -> 'a -> 'b pexp -> 'a * 'b pexp

@@ -1,0 +1,12 @@
+opam-version: "2.0"
+lib: [
+  "_destdir/home/fengde/SAIL/.opam/default/lib/sail_maker/META"
+  "_destdir/home/fengde/SAIL/.opam/default/lib/sail_maker/dune-package"
+  "_build/install/default/lib/sail_maker/opam"
+]
+bin: "_build/install/default/bin/sail_maker"
+doc: [
+  "_build/install/default/doc/sail_maker/CHANGELOG.md"
+  "_build/install/default/doc/sail_maker/LICENSE"
+  "_build/install/default/doc/sail_maker/README.md"
+]

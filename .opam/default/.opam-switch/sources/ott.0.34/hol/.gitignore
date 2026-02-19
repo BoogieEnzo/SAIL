@@ -1,0 +1,6 @@
+*.ui
+*.uo
+*Theory.*
+.HOLMK
+.hollogs
+selftest.exe

@@ -1,0 +1,52 @@
+\providecommand\saildoclabelled[2]{\phantomsection\label{#1}#2}
+\providecommand\saildocval[2]{#1 #2}
+\providecommand\saildocoutcome[2]{#1 #2}
+\providecommand\saildocfcl[2]{#1 #2}
+\providecommand\saildoctype[2]{#1 #2}
+\providecommand\saildocfn[2]{#1 #2}
+\providecommand\saildocoverload[2]{#1 #2}
+\providecommand\saildocabbrev[1]{#1\@}
+\providecommand\saildoclet[2]{#1 #2}
+\providecommand\saildocregister[2]{#1 #2}
+
+\newcommand{\sailregistersmall}{\saildoclabelled{sailregisterzsmall}{\saildocregister{}{\lstinputlisting[language=sail]{out/registerzsmall1f2dadee7c54a6dda75948109cacc9d5.tex}}}}
+
+\newcommand{\sailregisterbig}{\saildoclabelled{sailregisterzbig}{\saildocregister{}{\lstinputlisting[language=sail]{out/registerzbig1066534ae1b23930893efa3da0ce3b60.tex}}}}
+
+\newcommand{\sailval}[1]{
+  }
+
+\newcommand{\sailrefval}[2]{
+  }
+
+\newcommand{\sailfn}[1]{
+  }
+
+\newcommand{\sailreffn}[2]{
+  }
+
+\newcommand{\sailtype}[1]{
+  }
+
+\newcommand{\sailreftype}[2]{
+  }
+
+\newcommand{\saillet}[1]{
+  }
+
+\newcommand{\sailreflet}[2]{
+  }
+
+\newcommand{\sailregister}[1]{
+  \ifstrequal{#1}{big}{\sailregisterbig}{}%
+  \ifstrequal{#1}{small}{\sailregistersmall}{}}
+
+\newcommand{\sailrefregister}[2]{
+  \ifstrequal{#1}{big}{\hyperref[sailregisterzbig]{#2}}{}%
+  \ifstrequal{#1}{small}{\hyperref[sailregisterzsmall]{#2}}{}}
+
+\newcommand{\sailoutcome}[1]{
+  }
+
+\newcommand{\sailrefoutcome}[2]{
+  }

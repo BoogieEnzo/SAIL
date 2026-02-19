@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# Optional: use real gcc (bypass ccache) for builds
+export PATH="${ROOT_DIR:-/home/fengde/SAIL}/tools/no_ccache_bin:${PATH:-}"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RAT_DIR="${ROOT_DIR}/riscv-arch-test"

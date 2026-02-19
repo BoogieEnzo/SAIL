@@ -1,0 +1,5 @@
+# context              2.1.5 | linux/x86_64 | ocaml.4.14.1 | https://opam.ocaml.org#0431a98cc2177cbcc88e0937fe5b1b48e457e990
+# path                 ~/SAIL/.opam/default/.opam-switch/build/dune-site.3.21.1
+# command              ~/SAIL/.opam/default/bin/dune build -p dune-site -j 1 @install
+# env-file             ~/SAIL/.opam/log/dune-site-1491902-84364b.env
+# output-file          ~/SAIL/.opam/log/dune-site-1491902-84364b.out

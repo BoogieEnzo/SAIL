@@ -99,3 +99,27 @@
   - Fails at precheck: missing `sail_riscv_sim` in `sail-riscv/build/c_emulator`.
 - Result:
   - `M3-004` remains `blocked` until Sail simulator build succeeds.
+
+## 2026-02-19T00:37:00Z - Sail Installation Attempt
+
+- Action: Installing Sail toolchain using local OPAMROOT
+- Steps:
+  1. Initialized OPAMROOT at `/home/fengde/SAIL/.opam`
+  2. Created OCaml 5.1.1 switch successfully
+  3. Attempted to install sail package
+- Issue encountered:
+  - `dune.3.21.1` compilation fails due to ccache configuration error
+  - Error: `ccache: error: missing equal sign in "blake3_sse41_x86-64_unix.o"`
+  - Root cause: ccache environment variable misconfiguration
+- Current status:
+  - OCaml 5.1.1 switch created and ready
+  - dune and sail packages not yet installed
+  - Installation process blocked by ccache issue
+- Next steps:
+  - Disable ccache or fix ccache configuration
+  - Retry dune installation with `CCACHE_DISABLE=1`
+  - Then proceed with sail installation
+
+## 2026-02-19 (follow-up) - ccache bypass
+
+- Root cause: system `cc` is `/usr/lib/ccache/cc`; dune bootstrap runs `cc -c ...` and ccache fails. Created `tools/no_ccache_bin/` with `cc` and `gcc` symlinked to `/usr/bin/gcc`. To finish install: `export PATH="/home/fengde/SAIL/tools/no_ccache_bin:$PATH"` then `opam install -y dune` and `opam install -y sail` (with OPAMROOT and switch 5.1.1).
