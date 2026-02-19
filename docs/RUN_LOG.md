@@ -238,3 +238,17 @@
 - Current status:
   - `M3-004` remains `in_progress`.
   - Next action: run `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` to continue from next pending chunk.
+
+## 2026-02-19T20:06:37+08:00 - Auto Loop Resume (Phase1)
+
+- Command: `bash scripts/run_riscof_zabha_auto.sh`
+- Stage selected: `phase1` (no existing `.auto_stage_state`).
+- Probe result: local GNU toolchain does not support Zabha opcodes; script switched to smoke fallback.
+- Selection/result:
+  - `stage1_mode=smoke`
+  - `stage1_selected=18`
+  - Test outcome: 18/18 passed.
+- State update:
+  - Wrote `/home/fengde/SAIL/riscv-arch-test/work-zabha/.auto_stage_state` = `phase1_done`.
+- Next action:
+  - Run same command again to execute `phase2`.

@@ -149,7 +149,7 @@
         "bash -lc 'command -v spike >/dev/null'",
         "bash -lc 'command -v sail_riscv_sim >/dev/null'"
       ],
-      "notes": "phased validation active: phase4 has been split into phase4_1..phase4_4 to reduce long-run instability. Continue with auto runner chunk-by-chunk; final phase5(full Zabha) is expected blocked unless toolchain gains Zabha opcode support."
+      "notes": "phased validation active: phase4 has been split into phase4_1..phase4_4 to reduce long-run instability. Latest resumed run completed phase1(smoke fallback, 18 passed), next is phase2. Final phase5(full Zabha) is expected blocked unless toolchain gains Zabha opcode support."
     }
   ]
 }
