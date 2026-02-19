@@ -1,0 +1,25 @@
+opam-version: "2.0"
+compiler: ["ocaml-base-compiler.5.1.1"]
+roots: ["dune.3.21.1" "ocaml-base-compiler.5.1.1"]
+installed: [
+  "base-bigarray.base"
+  "base-bytes.base"
+  "base-domains.base"
+  "base-nnp.base"
+  "base-threads.base"
+  "base-unix.base"
+  "conf-findutils.1"
+  "conf-gmp.5"
+  "conf-pkg-config.4"
+  "dune.3.21.1"
+  "lem.2025-03-13"
+  "linksem.0.8"
+  "num.1.6"
+  "ocaml.5.1.1"
+  "ocaml-base-compiler.5.1.1"
+  "ocaml-config.3"
+  "ocaml-options-vanilla.1"
+  "ocamlbuild.0.16.1"
+  "ocamlfind.1.9.8"
+  "zarith.1.14"
+]

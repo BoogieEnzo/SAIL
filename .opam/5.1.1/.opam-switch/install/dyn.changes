@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/dyn" {"D"}
+  "doc/dyn/CHANGES.md" {"F:S192692T1771469338.81"}
+  "doc/dyn/LICENSE.md" {"F:S1111T1771469338.81"}
+  "doc/dyn/README.md" {"F:S5829T1771469338.81"}
+  "lib/dyn" {"D"}
+  "lib/dyn/META" {"F:S168T1771469338.8"}
+  "lib/dyn/dune-package" {"F:S657T1771469338.8"}
+  "lib/dyn/dyn.a" {"F:S44422T1771469338.81"}
+  "lib/dyn/dyn.cma" {"F:S19528T1771469338.81"}
+  "lib/dyn/dyn.cmi" {"F:S2045T1771469338.81"}
+  "lib/dyn/dyn.cmt" {"F:S31921T1771469338.81"}
+  "lib/dyn/dyn.cmti" {"F:S8861T1771469338.81"}
+  "lib/dyn/dyn.cmx" {"F:S3535T1771469338.81"}
+  "lib/dyn/dyn.cmxa" {"F:S1218T1771469338.81"}
+  "lib/dyn/dyn.cmxs" {"F:S55152T1771469338.81"}
+  "lib/dyn/dyn.ml" {"F:S4610T1771469338.81"}
+  "lib/dyn/dyn.mli" {"F:S1366T1771469338.81"}
+  "lib/dyn/opam" {"F:S828T1771469338.81"}
+]

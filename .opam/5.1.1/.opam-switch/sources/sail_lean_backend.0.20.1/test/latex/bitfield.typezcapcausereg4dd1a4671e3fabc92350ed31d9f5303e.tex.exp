@@ -1,4 +1,0 @@
-bitfield CapCauseReg : #\hyperref[sailzbits]{bits}#(16) = {
-  ExcCode : 15..8,
-  RegNum : 7..0,
-}

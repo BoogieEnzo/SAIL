@@ -1,0 +1,36 @@
+File "otherlibs/stdune/src/dune", line 24, characters 3-17:
+24 |    copyfile_stubs
+        ^^^^^^^^^^^^^^
+(cd _build/default/otherlibs/stdune/src && /home/fengde/SAIL/tools/no_ccache_bin/ccache gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC gcc -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always -g -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml -I /home/fengde/SAIL/.opam/5.1.1/lib/csexp -I /home/fengde/SAIL/.opam/5.1.1/lib/dyn -I /home/fengde/SAIL/.opam/5.1.1/lib/fs-io -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml/unix -I /home/fengde/SAIL/.opam/5.1.1/lib/ordering -I /home/fengde/SAIL/.opam/5.1.1/lib/pp -I /home/fengde/SAIL/.opam/5.1.1/lib/top-closure -o copyfile_stubs.o -c copyfile_stubs.c)
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory
+File "otherlibs/stdune/src/dune", line 20, characters 3-13:
+20 |    dune_flock
+        ^^^^^^^^^^
+(cd _build/default/otherlibs/stdune/src && /home/fengde/SAIL/tools/no_ccache_bin/ccache gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC gcc -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always -g -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml -I /home/fengde/SAIL/.opam/5.1.1/lib/csexp -I /home/fengde/SAIL/.opam/5.1.1/lib/dyn -I /home/fengde/SAIL/.opam/5.1.1/lib/fs-io -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml/unix -I /home/fengde/SAIL/.opam/5.1.1/lib/ordering -I /home/fengde/SAIL/.opam/5.1.1/lib/pp -I /home/fengde/SAIL/.opam/5.1.1/lib/top-closure -o dune_flock.o -c dune_flock.c)
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory
+File "otherlibs/stdune/src/dune", line 23, characters 3-17:
+23 |    platform_stubs
+        ^^^^^^^^^^^^^^
+(cd _build/default/otherlibs/stdune/src && /home/fengde/SAIL/tools/no_ccache_bin/ccache gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC gcc -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always -g -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml -I /home/fengde/SAIL/.opam/5.1.1/lib/csexp -I /home/fengde/SAIL/.opam/5.1.1/lib/dyn -I /home/fengde/SAIL/.opam/5.1.1/lib/fs-io -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml/unix -I /home/fengde/SAIL/.opam/5.1.1/lib/ordering -I /home/fengde/SAIL/.opam/5.1.1/lib/pp -I /home/fengde/SAIL/.opam/5.1.1/lib/top-closure -o platform_stubs.o -c platform_stubs.c)
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory
+File "otherlibs/stdune/src/dune", line 21, characters 3-10:
+21 |    readdir
+        ^^^^^^^
+(cd _build/default/otherlibs/stdune/src && /home/fengde/SAIL/tools/no_ccache_bin/ccache gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC gcc -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always -g -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml -I /home/fengde/SAIL/.opam/5.1.1/lib/csexp -I /home/fengde/SAIL/.opam/5.1.1/lib/dyn -I /home/fengde/SAIL/.opam/5.1.1/lib/fs-io -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml/unix -I /home/fengde/SAIL/.opam/5.1.1/lib/ordering -I /home/fengde/SAIL/.opam/5.1.1/lib/pp -I /home/fengde/SAIL/.opam/5.1.1/lib/top-closure -o readdir.o -c readdir.c)
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory
+File "otherlibs/stdune/src/dune", line 25, characters 3-15:
+25 |    signal_stubs)))
+        ^^^^^^^^^^^^
+(cd _build/default/otherlibs/stdune/src && /home/fengde/SAIL/tools/no_ccache_bin/ccache gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC gcc -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always -g -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml -I /home/fengde/SAIL/.opam/5.1.1/lib/csexp -I /home/fengde/SAIL/.opam/5.1.1/lib/dyn -I /home/fengde/SAIL/.opam/5.1.1/lib/fs-io -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml/unix -I /home/fengde/SAIL/.opam/5.1.1/lib/ordering -I /home/fengde/SAIL/.opam/5.1.1/lib/pp -I /home/fengde/SAIL/.opam/5.1.1/lib/top-closure -o signal_stubs.o -c signal_stubs.c)
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory
+File "otherlibs/stdune/src/dune", line 22, characters 3-14:
+22 |    wait4_stubs
+        ^^^^^^^^^^^
+(cd _build/default/otherlibs/stdune/src && /home/fengde/SAIL/tools/no_ccache_bin/ccache gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC gcc -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always -g -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml -I /home/fengde/SAIL/.opam/5.1.1/lib/csexp -I /home/fengde/SAIL/.opam/5.1.1/lib/dyn -I /home/fengde/SAIL/.opam/5.1.1/lib/fs-io -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml/unix -I /home/fengde/SAIL/.opam/5.1.1/lib/ordering -I /home/fengde/SAIL/.opam/5.1.1/lib/pp -I /home/fengde/SAIL/.opam/5.1.1/lib/top-closure -o wait4_stubs.o -c wait4_stubs.c)
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory

@@ -1,8 +1,0 @@
-
-A {
-  files interface/custom.sail
-}
-
-B {
-  files interface/custom_inst.sail
-}

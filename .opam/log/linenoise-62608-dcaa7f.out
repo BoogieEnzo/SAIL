@@ -1,0 +1,10 @@
+File "src/dune", line 8, characters 11-24:
+8 |   (c_names linenoise_src linenoise_stubs))
+               ^^^^^^^^^^^^^
+Error: Program ccache not found in the tree or in PATH
+ (context: default)
+File "src/dune", line 8, characters 25-40:
+8 |   (c_names linenoise_src linenoise_stubs))
+                             ^^^^^^^^^^^^^^^
+Error: Program ccache not found in the tree or in PATH
+ (context: default)

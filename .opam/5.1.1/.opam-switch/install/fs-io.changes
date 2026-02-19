@@ -1,0 +1,21 @@
+opam-version: "2.0"
+added: [
+  "doc/fs-io" {"D"}
+  "doc/fs-io/CHANGES.md" {"F:S192692T1771468987.98"}
+  "doc/fs-io/LICENSE.md" {"F:S1111T1771468987.98"}
+  "doc/fs-io/README.md" {"F:S5829T1771468987.98"}
+  "lib/fs-io" {"D"}
+  "lib/fs-io/META" {"F:S169T1771468987.95"}
+  "lib/fs-io/dune-package" {"F:S696T1771468987.95"}
+  "lib/fs-io/fs_io.a" {"F:S22656T1771468987.96"}
+  "lib/fs-io/fs_io.cma" {"F:S11072T1771468987.96"}
+  "lib/fs-io/fs_io.cmi" {"F:S513T1771468987.96"}
+  "lib/fs-io/fs_io.cmt" {"F:S19734T1771468987.96"}
+  "lib/fs-io/fs_io.cmti" {"F:S2804T1771468987.96"}
+  "lib/fs-io/fs_io.cmx" {"F:S1439T1771468987.97"}
+  "lib/fs-io/fs_io.cmxa" {"F:S683T1771468987.97"}
+  "lib/fs-io/fs_io.cmxs" {"F:S38480T1771468987.97"}
+  "lib/fs-io/fs_io.ml" {"F:S4639T1771468987.97"}
+  "lib/fs-io/fs_io.mli" {"F:S697T1771468987.97"}
+  "lib/fs-io/opam" {"F:S835T1771468987.97"}
+]

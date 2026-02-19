@@ -1,0 +1,16 @@
+File "src/dune", line 8, characters 11-24:
+8 |   (c_names linenoise_src linenoise_stubs))
+               ^^^^^^^^^^^^^
+(cd _build/default/src && /home/fengde/SAIL/tools/no_ccache_bin/ccache gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC gcc -D_FILE_OFFSET_BITS=64 gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC -g -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml -o linenoise_src.o -c linenoise_src.c)
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory
+File "src/dune", line 8, characters 25-40:
+8 |   (c_names linenoise_src linenoise_stubs))
+                             ^^^^^^^^^^^^^^^
+(cd _build/default/src && /home/fengde/SAIL/tools/no_ccache_bin/ccache gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC gcc -D_FILE_OFFSET_BITS=64 gcc -O2 -fno-strict-aliasing -fwrapv -pthread -fPIC -g -I /home/fengde/SAIL/.opam/5.1.1/lib/ocaml -o linenoise_stubs.o -c linenoise_stubs.c)
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory
+gcc: warning: gcc: linker input file unused because linking not done
+gcc: error: gcc: linker input file not found: No such file or directory

@@ -1,7 +1,0 @@
-A {
-  requires B
-}
-
-B {
-  requires A
-}

@@ -1,8 +1,0 @@
-
-A {
-  files private/amod.sail
-}
-
-B {
-  files private/bmod.sail
-}

@@ -1,0 +1,28 @@
+opam-version: "2.0"
+added: [
+  "doc/pprint" {"D"}
+  "doc/pprint/CHANGES.md" {"F:S3655T1771469333.98"}
+  "doc/pprint/LICENSE" {"F:S26550T1771469333.98"}
+  "doc/pprint/README.md" {"F:S391T1771469333.98"}
+  "doc/pprint/odoc-pages/index.mld" {"F:S12405T1771469333.98"}
+  "lib/pprint" {"D"}
+  "lib/pprint/META" {"F:S150T1771469333.97"}
+  "lib/pprint/PPrint.ml" {"F:S12513T1771469333.97"}
+  "lib/pprint/PPrint.mli" {"F:S13036T1771469333.97"}
+  "lib/pprint/PPrintEngine.ml" {"F:S26243T1771469333.97"}
+  "lib/pprint/PPrintEngine.mli" {"F:S14442T1771469333.97"}
+  "lib/pprint/dune-package" {"F:S984T1771469333.97"}
+  "lib/pprint/opam" {"F:S879T1771469333.97"}
+  "lib/pprint/pPrint.cmi" {"F:S6162T1771469333.97"}
+  "lib/pprint/pPrint.cmt" {"F:S62954T1771469333.97"}
+  "lib/pprint/pPrint.cmti" {"F:S31255T1771469333.97"}
+  "lib/pprint/pPrint.cmx" {"F:S8089T1771469333.97"}
+  "lib/pprint/pPrintEngine.cmi" {"F:S2860T1771469333.97"}
+  "lib/pprint/pPrintEngine.cmt" {"F:S61643T1771469333.97"}
+  "lib/pprint/pPrintEngine.cmti" {"F:S20223T1771469333.97"}
+  "lib/pprint/pPrintEngine.cmx" {"F:S4132T1771469333.97"}
+  "lib/pprint/pprint.a" {"F:S138834T1771469333.97"}
+  "lib/pprint/pprint.cma" {"F:S65911T1771469333.97"}
+  "lib/pprint/pprint.cmxa" {"F:S1546T1771469333.97"}
+  "lib/pprint/pprint.cmxs" {"F:S137264T1771469333.98"}
+]

@@ -1,6 +1,0 @@
-A {
-  default
-  B {
-    optional
-  }
-}

@@ -1,0 +1,4 @@
+# path                 ~/SAIL
+# command              /usr/bin/openssl sha512 /home/fengde/SAIL/.opam/download-cache/sha256/ba/ba81b8d7aa5705e04064013ab20c006b80c6db44f95225ac4fbf6042297e50eb
+# env-file             ~/SAIL/.opam/log/log-62608-5cdb94.env
+# output-file          ~/SAIL/.opam/log/log-62608-5cdb94.out

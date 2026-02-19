@@ -1,9 +1,0 @@
-
-A {
-  files interface/custom.sail
-}
-
-B {
-  requires A
-  files interface/custom_inst.sail
-}

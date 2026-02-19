@@ -1,2 +1,0 @@
-
-type xlen : Int

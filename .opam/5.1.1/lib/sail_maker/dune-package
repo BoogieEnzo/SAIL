@@ -1,0 +1,11 @@
+(lang dune 3.21)
+(name sail_maker)
+(version 0.20.1)
+(sections
+ (lib /home/fengde/SAIL/.opam/5.1.1/lib/sail_maker)
+ (bin /home/fengde/SAIL/.opam/5.1.1/bin)
+ (doc /home/fengde/SAIL/.opam/5.1.1/doc/sail_maker))
+(files
+ (lib (META dune-package opam))
+ (bin (sail_maker))
+ (doc (CHANGELOG.md LICENSE README.md)))
