@@ -6,14 +6,17 @@ RAT_DIR="${ROOT_DIR}/riscv-arch-test"
 CFG_DIR="${RAT_DIR}/riscof-plugins/rv64"
 WORK_DIR="${RAT_DIR}/work-zabha"
 STATE_FILE="${WORK_DIR}/.auto_stage_state"
+BASE_CFG_FILE="${CFG_DIR}/config.ini"
+RUNTIME_CFG_FILE="${CFG_DIR}/config.runtime.ini"
 STAGE1_TESTLIST="${WORK_DIR}/test_list_stage1.yaml"
 STAGE2_TESTLIST="${WORK_DIR}/test_list_stage2.yaml"
 STAGE3_TESTLIST="${WORK_DIR}/test_list_stage3.yaml"
 STAGE4_TESTLIST="${WORK_DIR}/test_list_stage4.yaml"
 STAGE5_TESTLIST="${WORK_DIR}/test_list_stage5.yaml"
 PROBE_LOG="${WORK_DIR}/zabha_probe.log"
-PHASE4_CHUNKS=24
+PHASE4_CHUNKS=48
 PHASE5_CHUNKS=4
+RISCOF_JOBS="${RISCOF_JOBS:-2}"
 
 if [[ ! -x "${ROOT_DIR}/.venv/bin/riscof" ]]; then
   echo "missing ${ROOT_DIR}/.venv/bin/riscof"
@@ -32,6 +35,44 @@ export PATH="${ROOT_DIR}/tools/spike/bin:${ROOT_DIR}/sail-riscv/build/c_emulator
 
 mkdir -p "${WORK_DIR}"
 cd "${CFG_DIR}"
+
+prepare_runtime_config() {
+  python3 - <<PY
+from pathlib import Path
+
+src = Path("${BASE_CFG_FILE}")
+dst = Path("${RUNTIME_CFG_FILE}")
+jobs = "${RISCOF_JOBS}"
+
+lines = src.read_text(encoding="utf-8").splitlines()
+
+def upsert_jobs(section_name: str):
+    header = f"[{section_name}]"
+    start = -1
+    for i, line in enumerate(lines):
+        if line.strip() == header:
+            start = i
+            break
+    if start < 0:
+        return
+    end = len(lines)
+    for i in range(start + 1, len(lines)):
+        if lines[i].strip().startswith("[") and lines[i].strip().endswith("]"):
+            end = i
+            break
+    for i in range(start + 1, end):
+        if lines[i].strip().startswith("jobs="):
+            lines[i] = f"jobs={jobs}"
+            return
+    lines.insert(end, f"jobs={jobs}")
+
+upsert_jobs("spike_simple")
+upsert_jobs("sail_cSim")
+dst.write_text("\n".join(lines) + "\n", encoding="utf-8")
+PY
+}
+
+prepare_runtime_config
 
 probe_zabha_support() {
   local src="${WORK_DIR}/.zabha_probe.S"
@@ -88,7 +129,7 @@ fi
 run_with_testfile() {
   local testfile="$1"
   "${ROOT_DIR}/.venv/bin/riscof" run \
-    --config config.ini \
+    --config "${RUNTIME_CFG_FILE}" \
     --suite "${RAT_DIR}/riscv-test-suite" \
     --env "${RAT_DIR}/riscv-test-suite/env" \
     --work-dir "${WORK_DIR}" \
@@ -98,7 +139,7 @@ run_with_testfile() {
 
 prepare_stage4_subtasks() {
   "${ROOT_DIR}/.venv/bin/riscof" testlist \
-    --config config.ini \
+    --config "${RUNTIME_CFG_FILE}" \
     --suite "${RAT_DIR}/riscv-test-suite" \
     --env "${RAT_DIR}/riscv-test-suite/env" \
     --work-dir "${WORK_DIR}"
@@ -137,7 +178,7 @@ items = sorted(data.items(), key=lambda kv: kv[0])
 total = len(items)
 if total == 0:
     raise SystemExit("stage4 split source has 0 tests")
-chunk_count = 24
+chunk_count = 48
 chunk_size = math.ceil(total / chunk_count)
 
 for idx in range(chunk_count):
@@ -158,7 +199,7 @@ prepare_stage5_subtasks() {
   fi
 
   "${ROOT_DIR}/.venv/bin/riscof" testlist \
-    --config config.ini \
+    --config "${RUNTIME_CFG_FILE}" \
     --suite "${RAT_DIR}/riscv-test-suite" \
     --env "${RAT_DIR}/riscv-test-suite/env" \
     --work-dir "${WORK_DIR}"
@@ -226,7 +267,7 @@ fi
 if [[ "${stage}" == "phase1" ]]; then
   echo "[auto] stage1: quick subset (toolchain-aware)"
   "${ROOT_DIR}/.venv/bin/riscof" testlist \
-    --config config.ini \
+    --config "${RUNTIME_CFG_FILE}" \
     --suite "${RAT_DIR}/riscv-test-suite" \
     --env "${RAT_DIR}/riscv-test-suite/env" \
     --work-dir "${WORK_DIR}"
@@ -288,7 +329,7 @@ fi
 if [[ "${stage}" == "phase2" ]]; then
   echo "[auto] stage2: compat-core subset"
   "${ROOT_DIR}/.venv/bin/riscof" testlist \
-    --config config.ini \
+    --config "${RUNTIME_CFG_FILE}" \
     --suite "${RAT_DIR}/riscv-test-suite" \
     --env "${RAT_DIR}/riscv-test-suite/env" \
     --work-dir "${WORK_DIR}"
@@ -340,7 +381,7 @@ fi
 if [[ "${stage}" == "phase3" ]]; then
   echo "[auto] stage3: compat-wide sample subset"
   "${ROOT_DIR}/.venv/bin/riscof" testlist \
-    --config config.ini \
+    --config "${RUNTIME_CFG_FILE}" \
     --suite "${RAT_DIR}/riscv-test-suite" \
     --env "${RAT_DIR}/riscv-test-suite/env" \
     --work-dir "${WORK_DIR}"
@@ -390,8 +431,13 @@ PY
   exit 0
 fi
 
-if [[ "${stage}" =~ ^phase4_([1-9]|1[0-9]|2[0-4])$ ]]; then
-  chunk_idx="${stage#phase4_}"
+if [[ "${stage}" =~ ^phase4_([0-9]+)$ ]]; then
+  chunk_idx="${BASH_REMATCH[1]}"
+  if (( chunk_idx < 1 || chunk_idx > PHASE4_CHUNKS )); then
+    echo "unknown stage: ${stage}"
+    echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_${PHASE4_CHUNKS}|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
+    exit 2
+  fi
   echo "[auto] ${stage}: full-compatible chunk ${chunk_idx}/${PHASE4_CHUNKS}"
   prepare_stage4_subtasks
 
@@ -461,5 +507,5 @@ if [[ "${stage}" == "done" ]]; then
 fi
 
 echo "unknown stage: ${stage}"
-echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_24|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
+echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_${PHASE4_CHUNKS}|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
 exit 2

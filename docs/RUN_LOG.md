@@ -407,3 +407,70 @@
     - `riscv-arch-test/work-zabha/.auto_stage_state` = `phase4_4_done`
 - Next action:
   1. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` (auto to `phase4_5`).
+
+## 2026-02-20T07:39:15+08:00 - Phase4 Split 48 + jobs=2 + phase4_5 Result
+
+- User decision applied:
+  - Increased phase4 granularity from 24 chunks to 48 chunks.
+  - Switched rv64 riscof plugin parallelism from `-j1` to `-j2`.
+- Changes:
+  - `scripts/run_riscof_zabha_auto.sh`
+    - `PHASE4_CHUNKS=48`
+    - stage4 split generator now uses `chunk_count=48`
+    - phase4 stage parser changed to generic numeric parser with range guard `[1..PHASE4_CHUNKS]`
+    - usage string updated to `phase4_1..phase4_48`
+  - `riscv-arch-test/riscof-plugins/rv64/config.ini`
+    - `[spike_simple] jobs=2`
+    - `[sail_cSim] jobs=2`
+- Acceptance checks:
+  - `bash -n scripts/run_riscof_zabha_auto.sh` => `bash_syntax_ok`
+  - Runtime probe during run:
+    - observed `make -k -j2 -f .../Makefile.DUT-spike` in process list.
+- phase4_5 execution:
+  - Command: `bash scripts/run_riscof_zabha_auto.sh`
+  - Auto-selected stage from state: `phase4_5`
+  - Selection/result:
+    - `stage4_selected=1892`
+    - `phase4_1..phase4_47_selected=40`
+    - `phase4_48_selected=12`
+    - `phase4_5_selected=40`
+    - Test outcome: `40/40 Passed`
+    - Script exit code: `0`
+  - State update:
+    - `riscv-arch-test/work-zabha/.auto_stage_state` = `phase4_5_done`
+- Next action:
+  1. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` (auto to `phase4_6`).
+
+## 2026-02-20T07:48:13+08:00 - Runtime jobs=2 Fix + phase4_6 Result
+
+- Context:
+  - phase4 granularity request applied to 48 chunks.
+  - Direct edit to submodule `rv64/config.ini` was replaced by a safer script-driven runtime config injection to keep main-repo commit self-contained.
+- Script update (`scripts/run_riscof_zabha_auto.sh`):
+  - Added runtime config generation:
+    - `BASE_CFG_FILE=${CFG_DIR}/config.ini`
+    - `RUNTIME_CFG_FILE=${CFG_DIR}/config.runtime.ini`
+    - `RISCOF_JOBS=${RISCOF_JOBS:-2}`
+  - `prepare_runtime_config` now preserves `[RISCOF]` section and upserts `jobs=2` into:
+    - `[spike_simple]`
+    - `[sail_cSim]`
+  - All `riscof testlist/run` invocations switched to `--config ${RUNTIME_CFG_FILE}`.
+- Incident and recovery:
+  - First runtime-config attempt wrote file under `work-zabha`, which gets cleaned by riscof and caused fallback/phase mismatch.
+  - Recovery actions:
+    - stopped mistaken run process
+    - restored stage pointer: `phase4_5_done`
+    - moved runtime config path to `rv64/config.runtime.ini`
+- Acceptance evidence:
+  - `bash -n scripts/run_riscof_zabha_auto.sh` => `bash_syntax_ok`
+  - Runtime process check confirmed `make -k -j2` and `make -j2` during DUT/reference runs.
+- phase4_6 execution:
+  - Command: `bash scripts/run_riscof_zabha_auto.sh`
+  - Stage/result:
+    - `phase4_6_selected=40`
+    - Test outcome: `40/40 Passed`
+    - Script exit code: `0`
+  - State update:
+    - `riscv-arch-test/work-zabha/.auto_stage_state` = `phase4_6_done`
+- Next action:
+  1. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` (auto to `phase4_7`).
