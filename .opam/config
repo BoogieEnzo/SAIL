@@ -1,7 +1,7 @@
 opam-version: "2.0"
 opam-root-version: "2.1"
 repositories: "default"
-installed-switches: ["5.1.1" "default"]
+installed-switches: ["5.1.1-noccache" "5.1.1" "default"]
 switch: "5.1.1"
 download-jobs: 3
 eval-variables: [

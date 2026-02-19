@@ -1,0 +1,13 @@
+opam-version: "2.0"
+added: [
+  "doc/sail_smt_backend" {"D"}
+  "doc/sail_smt_backend/CHANGELOG.md" {"F:S20528T1771472965.77"}
+  "doc/sail_smt_backend/LICENSE" {"F:S2594T1771472965.77"}
+  "doc/sail_smt_backend/README.md" {"F:S22971T1771472965.77"}
+  "lib/sail_smt_backend" {"D"}
+  "lib/sail_smt_backend/META" {"F:S0T1771472965.77"}
+  "lib/sail_smt_backend/dune-package" {"F:S406T1771472965.77"}
+  "lib/sail_smt_backend/opam" {"F:S922T1771472965.77"}
+  "share/libsail/plugins/sail_plugin_smt.cma" {"F:S168951T1771472965.77"}
+  "share/libsail/plugins/sail_plugin_smt.cmxs" {"F:S355736T1771472965.77"}
+]

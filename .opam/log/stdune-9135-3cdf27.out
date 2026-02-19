@@ -1,0 +1,10 @@
+File ".dune/cc_vendor/_unknown_", line 1, characters 0-0:
+Error: Program ccache not found in the tree or in PATH
+ (context: default)
+File "otherlibs/stdune/src/flags/dune", line 2, characters 7-16:
+2 |  (name gen_flags))
+           ^^^^^^^^^
+(cd _build/default && /home/fengde/SAIL/.opam/5.1.1/bin/ocamlopt.opt -w @1..3@5..28@31..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -alert -unstable -g -o otherlibs/stdune/src/flags/gen_flags.exe otherlibs/stdune/src/flags/.gen_flags.eobjs/native/dune__exe__Gen_flags.cmx)
+sh: 1: ccache: not found
+File "caml_startup", line 1:
+Error: I/O error: ccache gcc -O2 -fno-strict-aliasing -fwrapv -pthread   -Wl,-E  -o 'otherlibs/stdune/src/flags/gen_flags.exe'  '-L/home/fengde/SAIL/.opam/5.1.1/lib/ocaml'  '/tmp/build_99188b_dune/camlstartup25f371.o' '/home/fengde/SAIL/.opam/5.1.1/lib/ocaml/std_exit.o' 'otherlibs/stdune/src/flags/.gen_flags.eobjs/native/dune__exe__Gen_flags.o' '/home/fengde/SAIL/.opam/5.1.1/lib/ocaml/stdlib.a' '/home/fengde/SAIL/.opam/5.1.1/lib/ocaml/libasmrun.a'  -lm  -lpthread

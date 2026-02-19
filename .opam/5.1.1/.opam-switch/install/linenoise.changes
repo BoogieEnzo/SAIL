@@ -1,0 +1,22 @@
+opam-version: "2.0"
+added: [
+  "doc/linenoise" {"D"}
+  "doc/linenoise/CHANGES.md" {"F:S195T1771472774.27"}
+  "doc/linenoise/README.md" {"F:S2150T1771472774.27"}
+  "lib/linenoise" {"D"}
+  "lib/linenoise/META" {"F:S180T1771472774.27"}
+  "lib/linenoise/dune-package" {"F:S964T1771472774.27"}
+  "lib/linenoise/lNoise.cmi" {"F:S1056T1771472774.27"}
+  "lib/linenoise/lNoise.cmt" {"F:S8756T1771472774.27"}
+  "lib/linenoise/lNoise.cmti" {"F:S6391T1771472774.27"}
+  "lib/linenoise/lNoise.cmx" {"F:S999T1771472774.27"}
+  "lib/linenoise/lNoise.ml" {"F:S1820T1771472774.27"}
+  "lib/linenoise/lNoise.mli" {"F:S2782T1771472774.27"}
+  "lib/linenoise/liblinenoise_stubs.a" {"F:S167428T1771472774.27"}
+  "lib/linenoise/linenoise.a" {"F:S15246T1771472774.27"}
+  "lib/linenoise/linenoise.cma" {"F:S5083T1771472774.27"}
+  "lib/linenoise/linenoise.cmxa" {"F:S335T1771472774.27"}
+  "lib/linenoise/linenoise.cmxs" {"F:S115880T1771472774.27"}
+  "lib/linenoise/opam" {"F:S668T1771472774.27"}
+  "lib/stublibs/dlllinenoise_stubs.so" {"F:S105696T1771472774.27"}
+]

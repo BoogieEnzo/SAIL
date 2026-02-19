@@ -1,0 +1,4 @@
+# path                 ~/SAIL
+# command              /usr/bin/curl --write-out %{http_code}\n --retry 3 --retry-delay 2 --user-agent opam/2.1.5 -L -o /home/fengde/SAIL/.opam/download-cache/sha256/34/3486bf5b35b185981cab0b0a81f870547648a1ca433085aa79afd17c44959751.tmp.part -- https://opam.ocaml.org/cache/sha256/34/3486bf5b35b185981cab0b0a81f870547648a1ca433085aa79afd17c44959751
+# env-file             ~/SAIL/.opam/log/log-12659-91b1a1.env
+# output-file          ~/SAIL/.opam/log/log-12659-91b1a1.out

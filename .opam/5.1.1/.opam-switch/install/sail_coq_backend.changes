@@ -1,0 +1,13 @@
+opam-version: "2.0"
+added: [
+  "doc/sail_coq_backend" {"D"}
+  "doc/sail_coq_backend/CHANGELOG.md" {"F:S20528T1771472945.4"}
+  "doc/sail_coq_backend/LICENSE" {"F:S2594T1771472945.4"}
+  "doc/sail_coq_backend/README.md" {"F:S22971T1771472945.4"}
+  "lib/sail_coq_backend" {"D"}
+  "lib/sail_coq_backend/META" {"F:S0T1771472945.4"}
+  "lib/sail_coq_backend/dune-package" {"F:S406T1771472945.4"}
+  "lib/sail_coq_backend/opam" {"F:S922T1771472945.4"}
+  "share/libsail/plugins/sail_plugin_coq.cma" {"F:S635903T1771472945.4"}
+  "share/libsail/plugins/sail_plugin_coq.cmxs" {"F:S1030096T1771472945.4"}
+]

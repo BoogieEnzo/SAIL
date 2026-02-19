@@ -1,0 +1,5 @@
+# context              2.1.5 | linux/x86_64 |  | https://opam.ocaml.org#0431a98cc2177cbcc88e0937fe5b1b48e457e990
+# path                 ~/SAIL/.opam/5.1.1-noccache/.opam-switch/build/ocaml-base-compiler.5.1.1
+# command              /usr/bin/make -j1
+# env-file             ~/SAIL/.opam/log/ocaml-base-compiler-15802-b3718d.env
+# output-file          ~/SAIL/.opam/log/ocaml-base-compiler-15802-b3718d.out

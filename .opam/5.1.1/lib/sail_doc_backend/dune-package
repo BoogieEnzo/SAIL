@@ -1,0 +1,12 @@
+(lang dune 3.21)
+(name sail_doc_backend)
+(version 0.20.1)
+(sections
+ (lib /home/fengde/SAIL/.opam/5.1.1/lib/sail_doc_backend)
+ (share_root /home/fengde/SAIL/.opam/5.1.1/share)
+ (doc /home/fengde/SAIL/.opam/5.1.1/doc/sail_doc_backend))
+(files
+ (lib (META dune-package opam))
+ (share_root
+  (libsail/plugins/sail_plugin_doc.cma libsail/plugins/sail_plugin_doc.cmxs))
+ (doc (CHANGELOG.md LICENSE README.md)))

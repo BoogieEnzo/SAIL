@@ -1,0 +1,13 @@
+opam-version: "2.0"
+synopsis: "5.1.1-noccache"
+opam-root: "/home/fengde/SAIL/.opam"
+invariant: [
+  "ocaml-base-compiler" {= "5.1.1"}
+]
+paths {
+  
+}
+variables {
+  user: "fengde"
+  group: "fengde"
+}

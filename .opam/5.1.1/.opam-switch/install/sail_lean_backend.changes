@@ -1,0 +1,13 @@
+opam-version: "2.0"
+added: [
+  "doc/sail_lean_backend" {"D"}
+  "doc/sail_lean_backend/CHANGELOG.md" {"F:S20528T1771472954.56"}
+  "doc/sail_lean_backend/LICENSE" {"F:S2594T1771472954.56"}
+  "doc/sail_lean_backend/README.md" {"F:S22971T1771472954.56"}
+  "lib/sail_lean_backend" {"D"}
+  "lib/sail_lean_backend/META" {"F:S0T1771472954.56"}
+  "lib/sail_lean_backend/dune-package" {"F:S411T1771472954.56"}
+  "lib/sail_lean_backend/opam" {"F:S923T1771472954.56"}
+  "share/libsail/plugins/sail_plugin_lean.cma" {"F:S279166T1771472954.56"}
+  "share/libsail/plugins/sail_plugin_lean.cmxs" {"F:S457336T1771472954.56"}
+]

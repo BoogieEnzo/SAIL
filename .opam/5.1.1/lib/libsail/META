@@ -1,0 +1,8 @@
+version = "0.20.1"
+description = ""
+requires =
+"dune-private-libs.dune-section dune-site lem linksem menhirLib pprint yojson"
+archive(byte) = "libsail.cma"
+archive(native) = "libsail.cmxa"
+plugin(byte) = "libsail.cma"
+plugin(native) = "libsail.cmxs"

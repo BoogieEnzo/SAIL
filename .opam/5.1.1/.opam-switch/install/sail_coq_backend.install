@@ -1,0 +1,17 @@
+opam-version: "2.0"
+lib: [
+  "_destdir/home/fengde/SAIL/.opam/5.1.1/lib/sail_coq_backend/META"
+  "_destdir/home/fengde/SAIL/.opam/5.1.1/lib/sail_coq_backend/dune-package"
+  "_build/install/default/lib/sail_coq_backend/opam"
+]
+share_root: [
+  "_build/install/default/share/libsail/plugins/sail_plugin_coq.cma"
+    {"libsail/plugins/sail_plugin_coq.cma"}
+  "_build/install/default/share/libsail/plugins/sail_plugin_coq.cmxs"
+    {"libsail/plugins/sail_plugin_coq.cmxs"}
+]
+doc: [
+  "_build/install/default/doc/sail_coq_backend/CHANGELOG.md"
+  "_build/install/default/doc/sail_coq_backend/LICENSE"
+  "_build/install/default/doc/sail_coq_backend/README.md"
+]

@@ -1,0 +1,17 @@
+opam-version: "2.0"
+lib: [
+  "_destdir/home/fengde/SAIL/.opam/5.1.1/lib/sail_lem_backend/META"
+  "_destdir/home/fengde/SAIL/.opam/5.1.1/lib/sail_lem_backend/dune-package"
+  "_build/install/default/lib/sail_lem_backend/opam"
+]
+share_root: [
+  "_build/install/default/share/libsail/plugins/sail_plugin_lem.cma"
+    {"libsail/plugins/sail_plugin_lem.cma"}
+  "_build/install/default/share/libsail/plugins/sail_plugin_lem.cmxs"
+    {"libsail/plugins/sail_plugin_lem.cmxs"}
+]
+doc: [
+  "_build/install/default/doc/sail_lem_backend/CHANGELOG.md"
+  "_build/install/default/doc/sail_lem_backend/LICENSE"
+  "_build/install/default/doc/sail_lem_backend/README.md"
+]

@@ -1,0 +1,22 @@
+opam-version: "2.0"
+lib: [
+  "_build/install/default/lib/linenoise/META"
+  "_build/install/default/lib/linenoise/dune-package"
+  "_build/install/default/lib/linenoise/lNoise.cmi"
+  "_build/install/default/lib/linenoise/lNoise.cmt"
+  "_build/install/default/lib/linenoise/lNoise.cmti"
+  "_build/install/default/lib/linenoise/lNoise.cmx"
+  "_build/install/default/lib/linenoise/lNoise.ml"
+  "_build/install/default/lib/linenoise/lNoise.mli"
+  "_build/install/default/lib/linenoise/liblinenoise_stubs.a"
+  "_build/install/default/lib/linenoise/linenoise.a"
+  "_build/install/default/lib/linenoise/linenoise.cma"
+  "_build/install/default/lib/linenoise/linenoise.cmxa"
+  "_build/install/default/lib/linenoise/opam"
+]
+stublibs: "_build/install/default/lib/stublibs/dlllinenoise_stubs.so"
+doc: [
+  "_build/install/default/doc/linenoise/CHANGES.md"
+  "_build/install/default/doc/linenoise/README.md"
+]
+libexec: "_build/install/default/lib/linenoise/linenoise.cmxs"

@@ -1,0 +1,3 @@
+OPAM_SWITCH_PREFIX	=	/home/fengde/SAIL/.opam/5.1.1-noccache	Prefix\ of\ the\ current\ opam\ switch
+MANPATH	=:	/home/fengde/SAIL/.opam/5.1.1-noccache/man	Current\ opam\ switch\ man\ dir
+PATH	=+=	/home/fengde/SAIL/.opam/5.1.1-noccache/bin	Binary\ dir\ for\ opam\ switch\ 5.1.1-noccache

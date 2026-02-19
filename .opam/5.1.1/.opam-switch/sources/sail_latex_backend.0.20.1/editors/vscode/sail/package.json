@@ -1,0 +1,46 @@
+{
+    "name": "sail",
+    "displayName": "sail",
+    "description": "Syntax support for the Sail ISA specification language",
+    "version": "0.0.4",
+    "publisher": "rems-project",
+    "icon": "images/sail_icon.png",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/rems-project/sail"
+    },
+    "engines": {
+        "vscode": "^1.42.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "keywords": [
+        "language",
+        "sail",
+        "highlight",
+        "syntax"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "sail",
+                "aliases": [
+                    "Sail",
+                    "sail"
+                ],
+                "extensions": [
+                    ".sail"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "sail",
+                "scopeName": "source.sail",
+                "path": "./syntaxes/sail.tmLanguage.json"
+            }
+        ]
+    }
+}
