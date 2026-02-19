@@ -220,3 +220,21 @@
   - DUT signatures are continuously generated; run is active.
 - Expected boundary:
   - `phase5` remains blocked on this host until GNU toolchain supports Zabha opcodes.
+
+## 2026-02-19T19:56:49+08:00 - Phase4 Split + Old Run Stop
+
+- User request: stop current long `phase4` run and split it into 4 subtasks.
+- Process stop evidence:
+  - Command: `pgrep -af 'run_riscof_zabha_auto|riscof run|Makefile.DUT-spike|Makefile.Reference-sail_c_simulator|test_list_stage4'`
+  - Result after kill check: no matching worker process remained (only the `pgrep` command itself).
+- Script change:
+  - Updated `scripts/run_riscof_zabha_auto.sh`.
+  - `phase4` is now split into `phase4_1`, `phase4_2`, `phase4_3`, `phase4_4`.
+  - `auto` stage progression now supports chunked phase4 continuation.
+  - Added `phase4` alias behavior to route to next unfinished chunk.
+- Acceptance checks:
+  - Command: `bash -n scripts/run_riscof_zabha_auto.sh`
+  - Result: `bash_syntax_ok`.
+- Current status:
+  - `M3-004` remains `in_progress`.
+  - Next action: run `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` to continue from next pending chunk.

@@ -49,10 +49,20 @@ EOF
 
 stage="${1:-auto}"
 if [[ "${stage}" == "auto" ]]; then
-  if [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_done$" "${STATE_FILE}"; then
+  if [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_done$" "${STATE_FILE}"; then
+    stage="done"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_4_done$" "${STATE_FILE}"; then
     stage="phase5"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_done$" "${STATE_FILE}"; then
+    stage="phase5"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_3_done$" "${STATE_FILE}"; then
+    stage="phase4_4"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_2_done$" "${STATE_FILE}"; then
+    stage="phase4_3"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_1_done$" "${STATE_FILE}"; then
+    stage="phase4_2"
   elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase3_done$" "${STATE_FILE}"; then
-    stage="phase4"
+    stage="phase4_1"
   elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase2_done$" "${STATE_FILE}"; then
     stage="phase3"
   elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase1_done$" "${STATE_FILE}"; then
@@ -72,6 +82,71 @@ run_with_testfile() {
     --testfile "${testfile}" \
     --no-browser
 }
+
+prepare_stage4_subtasks() {
+  "${ROOT_DIR}/.venv/bin/riscof" testlist \
+    --config config.ini \
+    --suite "${RAT_DIR}/riscv-test-suite" \
+    --env "${RAT_DIR}/riscv-test-suite/env" \
+    --work-dir "${WORK_DIR}"
+
+  if probe_zabha_support; then
+    cp "${WORK_DIR}/test_list.yaml" "${STAGE4_TESTLIST}"
+    echo "[auto] probe: Zabha supported, stage4 includes all tests"
+  else
+    python3 - <<'PY'
+import yaml
+from pathlib import Path
+
+work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
+src = work / "test_list.yaml"
+dst = work / "test_list_stage4.yaml"
+data = yaml.safe_load(src.read_text()) or {}
+blocked_tokens = ("/Zabha/", "/Zacas/", "/Zimop/", "/Zcmop/")
+filtered = {k: v for k, v in data.items() if not any(t in str(v.get("test_path", "")) for t in blocked_tokens)}
+if not filtered:
+    raise SystemExit("stage4 filter produced 0 tests")
+dst.write_text(yaml.safe_dump(filtered, sort_keys=True))
+print(f"stage4_selected={len(filtered)}")
+PY
+    echo "[auto] probe: no Zabha support, stage4 excludes unsupported extension tests"
+  fi
+
+  python3 - <<'PY'
+import math
+import yaml
+from pathlib import Path
+
+work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
+src = work / "test_list_stage4.yaml"
+data = yaml.safe_load(src.read_text()) or {}
+items = sorted(data.items(), key=lambda kv: kv[0])
+total = len(items)
+if total == 0:
+    raise SystemExit("stage4 split source has 0 tests")
+chunk_size = math.ceil(total / 4)
+
+for idx in range(4):
+    start = idx * chunk_size
+    end = min((idx + 1) * chunk_size, total)
+    chunk = dict(items[start:end])
+    out = work / f"test_list_stage4_{idx + 1}.yaml"
+    out.write_text(yaml.safe_dump(chunk, sort_keys=True))
+    print(f"stage4_{idx + 1}_selected={len(chunk)}")
+PY
+}
+
+if [[ "${stage}" == "phase4" ]]; then
+  if [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_3_done$" "${STATE_FILE}"; then
+    stage="phase4_4"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_2_done$" "${STATE_FILE}"; then
+    stage="phase4_3"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_1_done$" "${STATE_FILE}"; then
+    stage="phase4_2"
+  else
+    stage="phase4_1"
+  fi
+fi
 
 if [[ "${stage}" == "phase1" ]]; then
   echo "[auto] stage1: quick subset (toolchain-aware)"
@@ -240,40 +315,36 @@ PY
   exit 0
 fi
 
-if [[ "${stage}" == "phase4" ]]; then
-  echo "[auto] stage4: full-compatible (exclude unsupported extensions when needed)"
-  "${ROOT_DIR}/.venv/bin/riscof" testlist \
-    --config config.ini \
-    --suite "${RAT_DIR}/riscv-test-suite" \
-    --env "${RAT_DIR}/riscv-test-suite/env" \
-    --work-dir "${WORK_DIR}"
+if [[ "${stage}" =~ ^phase4_[1234]$ ]]; then
+  chunk_idx="${stage#phase4_}"
+  echo "[auto] ${stage}: full-compatible chunk ${chunk_idx}/4"
+  prepare_stage4_subtasks
 
-  if probe_zabha_support; then
-    cp "${WORK_DIR}/test_list.yaml" "${STAGE4_TESTLIST}"
-    echo "[auto] probe: Zabha supported, stage4 includes all tests"
-  else
-    python3 - <<'PY'
+  chunk_file="${WORK_DIR}/test_list_stage4_${chunk_idx}.yaml"
+  chunk_count="$(python3 - <<PY
 import yaml
 from pathlib import Path
-
-work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
-src = work / "test_list.yaml"
-dst = work / "test_list_stage4.yaml"
-data = yaml.safe_load(src.read_text()) or {}
-blocked_tokens = ("/Zabha/", "/Zacas/", "/Zimop/", "/Zcmop/")
-filtered = {k: v for k, v in data.items() if not any(t in str(v.get("test_path", "")) for t in blocked_tokens)}
-if not filtered:
-    raise SystemExit("stage4 filter produced 0 tests")
-dst.write_text(yaml.safe_dump(filtered, sort_keys=True))
-print(f"stage4_selected={len(filtered)}")
+p = Path("${chunk_file}")
+d = yaml.safe_load(p.read_text()) if p.exists() else {}
+print(len(d or {}))
 PY
-    echo "[auto] probe: no Zabha support, stage4 excludes unsupported extension tests"
+)"
+  if [[ "${chunk_count}" == "0" ]]; then
+    echo "[auto] ${stage}: chunk empty, skip run"
+  else
+    run_with_testfile "${chunk_file}"
   fi
 
-  run_with_testfile "${STAGE4_TESTLIST}"
-  echo "phase4_done" > "${STATE_FILE}"
-  echo "[auto] stage4 passed."
-  echo "[auto] next: run the same command again for stage5 (true full Zabha)."
+  echo "phase4_${chunk_idx}_done" > "${STATE_FILE}"
+  if [[ "${chunk_idx}" == "4" ]]; then
+    echo "phase4_done" > "${STATE_FILE}"
+    echo "[auto] stage4 all chunks passed."
+    echo "[auto] next: run the same command again for stage5 (true full Zabha)."
+  else
+    next_chunk=$((chunk_idx + 1))
+    echo "[auto] ${stage} passed."
+    echo "[auto] next: run the same command again for phase4_${next_chunk}."
+  fi
   exit 0
 fi
 
@@ -290,6 +361,11 @@ if [[ "${stage}" == "phase5" ]]; then
   exit 0
 fi
 
+if [[ "${stage}" == "done" ]]; then
+  echo "[auto] all phases already marked done."
+  exit 0
+fi
+
 echo "unknown stage: ${stage}"
-echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase5]"
+echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1|phase4_2|phase4_3|phase4_4|phase5]"
 exit 2

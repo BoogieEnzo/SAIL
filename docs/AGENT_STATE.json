@@ -3,6 +3,6 @@
   "allow_development": true,
   "current_stage": "M3",
   "current_task": "M3-004",
-  "updated_at": "2026-02-19T18:29:50+08:00",
-  "notes": "M3-004 phased loop active: stage1+stage2 passed, stage3(compat-wide sample) running; phase5(full Zabha) still blocked by local toolchain lacking Zabha opcode support."
+  "updated_at": "2026-02-19T19:56:49+08:00",
+  "notes": "M3-004 phased loop updated: phase4 was split into phase4_1..phase4_4 for shorter runs; current state ready to continue from next pending chunk. Phase5(full Zabha) remains blocked by local toolchain lacking Zabha opcode support."
 }
