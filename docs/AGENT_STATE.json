@@ -3,6 +3,6 @@
   "allow_development": true,
   "current_stage": "M3",
   "current_task": "M3-004",
-  "updated_at": "2026-02-19T21:19:23+08:00",
-  "notes": "M3-004 loop tuning update: phase4 split granularity increased from 4 chunks to 12 chunks to reduce rework after interruption; phase5 stays 4 chunks. phase1/phase2/phase3 remain passed, and rerun can resume from phase3_done -> phase4_1."
+  "updated_at": "2026-02-19T21:56:26+08:00",
+  "notes": "M3-004 phased execution active: phase4 split is 24 chunks and phase5 remains 4 chunks. phase4_1 passed (79/79), current checkpoint is phase4_1_done, next target is phase4_2 with per-chunk reporting and commit."
 }

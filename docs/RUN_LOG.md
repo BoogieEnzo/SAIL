@@ -312,3 +312,40 @@
 - Next action:
   1. Restore stage pointer as needed (`phase3_done` if interrupted).
   2. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh`.
+
+## 2026-02-19T21:56:26+08:00 - Resume + Phase4 Split 24 + phase4_1 Result
+
+- Session recovery summary:
+  - Read state/queue/log/context files:
+    - `docs/AGENT_STATE.json`
+    - `docs/TASK_QUEUE.json`
+    - `docs/RUN_LOG.md`
+    - `docs/CONTEXT_BRIEF.md`
+- Quick environment check (required):
+  - Command: `command -v riscof spike sail_riscv_sim riscv64-unknown-elf-gcc || true`
+  - Result: only `/usr/bin/riscv64-unknown-elf-gcc` in current PATH.
+  - Existence check:
+    - `[exists] .venv`
+    - `[exists] tools/spike`
+    - `[exists] sail-riscv/build`
+- Baseline gate:
+  - `bash scripts/check_min.sh` => passed.
+- Script tuning:
+  - `scripts/run_riscof_zabha_auto.sh`
+  - Updated `PHASE4_CHUNKS=24` and phase4 pattern/usage to `phase4_1..phase4_24`.
+- Acceptance checks:
+  - `bash -n scripts/run_riscof_zabha_auto.sh` => `bash_syntax_ok`.
+- phase4_1 execution:
+  - Command: `bash scripts/run_riscof_zabha_auto.sh phase4_1`
+  - First attempt failed at `riscof testlist` cleanup with:
+    - `OSError: [Errno 39] Directory not empty: '/home/fengde/SAIL/riscv-arch-test/work-zabha'`
+  - Investigation found an old long-running background `riscof run` still active on stale stage4 chunk.
+  - Mitigation: stopped stale process group and re-ran `phase4_1`.
+  - Final result:
+    - `stage4_selected=1892`
+    - Chunk split result: `phase4_1..phase4_23=79 tests`, `phase4_24=75 tests`
+    - `phase4_1` executed `79` tests, all `Passed`
+    - Script exit code `0`
+    - State updated to `phase4_1_done`
+- Next action:
+  1. Continue with `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` (auto to `phase4_2`).

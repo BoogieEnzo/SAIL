@@ -12,7 +12,7 @@ STAGE3_TESTLIST="${WORK_DIR}/test_list_stage3.yaml"
 STAGE4_TESTLIST="${WORK_DIR}/test_list_stage4.yaml"
 STAGE5_TESTLIST="${WORK_DIR}/test_list_stage5.yaml"
 PROBE_LOG="${WORK_DIR}/zabha_probe.log"
-PHASE4_CHUNKS=12
+PHASE4_CHUNKS=24
 PHASE5_CHUNKS=4
 
 if [[ ! -x "${ROOT_DIR}/.venv/bin/riscof" ]]; then
@@ -137,7 +137,7 @@ items = sorted(data.items(), key=lambda kv: kv[0])
 total = len(items)
 if total == 0:
     raise SystemExit("stage4 split source has 0 tests")
-chunk_count = 12
+chunk_count = 24
 chunk_size = math.ceil(total / chunk_count)
 
 for idx in range(chunk_count):
@@ -390,7 +390,7 @@ PY
   exit 0
 fi
 
-if [[ "${stage}" =~ ^phase4_([1-9]|1[0-2])$ ]]; then
+if [[ "${stage}" =~ ^phase4_([1-9]|1[0-9]|2[0-4])$ ]]; then
   chunk_idx="${stage#phase4_}"
   echo "[auto] ${stage}: full-compatible chunk ${chunk_idx}/${PHASE4_CHUNKS}"
   prepare_stage4_subtasks
@@ -461,5 +461,5 @@ if [[ "${stage}" == "done" ]]; then
 fi
 
 echo "unknown stage: ${stage}"
-echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_12|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
+echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_24|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
 exit 2
