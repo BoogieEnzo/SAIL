@@ -3,6 +3,6 @@
   "allow_development": true,
   "current_stage": "M3",
   "current_task": "M3-004",
-  "updated_at": "2026-02-19T20:08:54+08:00",
-  "notes": "M3-004 auto loop resumed and advanced: phase1(smoke fallback) and phase2(core_compat, 20/20) both passed. Next pending stage is phase3 (compat-wide sample). Phase5(full Zabha) remains blocked by local toolchain lacking Zabha opcode support."
+  "updated_at": "2026-02-19T20:14:54+08:00",
+  "notes": "M3-004 auto loop resumed and advanced: phase1+phase2 passed. phase5 has been split into phase5_1..phase5_4; acceptance check on phase5_1 confirms immediate blocked status (exit 3) when local toolchain lacks Zabha opcode support. Next pending execution path remains phase3 -> phase4 chunks."
 }

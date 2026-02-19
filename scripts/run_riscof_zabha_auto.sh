@@ -10,6 +10,7 @@ STAGE1_TESTLIST="${WORK_DIR}/test_list_stage1.yaml"
 STAGE2_TESTLIST="${WORK_DIR}/test_list_stage2.yaml"
 STAGE3_TESTLIST="${WORK_DIR}/test_list_stage3.yaml"
 STAGE4_TESTLIST="${WORK_DIR}/test_list_stage4.yaml"
+STAGE5_TESTLIST="${WORK_DIR}/test_list_stage5.yaml"
 PROBE_LOG="${WORK_DIR}/zabha_probe.log"
 
 if [[ ! -x "${ROOT_DIR}/.venv/bin/riscof" ]]; then
@@ -51,10 +52,18 @@ stage="${1:-auto}"
 if [[ "${stage}" == "auto" ]]; then
   if [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_done$" "${STATE_FILE}"; then
     stage="done"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_4_done$" "${STATE_FILE}"; then
+    stage="done"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_3_done$" "${STATE_FILE}"; then
+    stage="phase5_4"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_2_done$" "${STATE_FILE}"; then
+    stage="phase5_3"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_1_done$" "${STATE_FILE}"; then
+    stage="phase5_2"
   elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_4_done$" "${STATE_FILE}"; then
-    stage="phase5"
+    stage="phase5_1"
   elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_done$" "${STATE_FILE}"; then
-    stage="phase5"
+    stage="phase5_1"
   elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_3_done$" "${STATE_FILE}"; then
     stage="phase4_4"
   elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_2_done$" "${STATE_FILE}"; then
@@ -136,6 +145,50 @@ for idx in range(4):
 PY
 }
 
+prepare_stage5_subtasks() {
+  if ! probe_zabha_support; then
+    echo "[auto] stage5 blocked: local riscv64-unknown-elf-gcc/binutils do not support Zabha opcodes."
+    echo "[auto] detail: see ${PROBE_LOG}"
+    return 3
+  fi
+
+  "${ROOT_DIR}/.venv/bin/riscof" testlist \
+    --config config.ini \
+    --suite "${RAT_DIR}/riscv-test-suite" \
+    --env "${RAT_DIR}/riscv-test-suite/env" \
+    --work-dir "${WORK_DIR}"
+
+  python3 - <<'PY'
+import math
+import yaml
+from pathlib import Path
+
+work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
+src = work / "test_list.yaml"
+dst = work / "test_list_stage5.yaml"
+data = yaml.safe_load(src.read_text()) or {}
+filtered = {
+    k: v for k, v in data.items()
+    if "/Zabha/" in str(v.get("test_path", "")) or "/Zacas/" in str(v.get("test_path", ""))
+}
+if not filtered:
+    raise SystemExit("stage5 filter produced 0 tests")
+dst.write_text(yaml.safe_dump(filtered, sort_keys=True))
+
+items = sorted(filtered.items(), key=lambda kv: kv[0])
+total = len(items)
+chunk_size = math.ceil(total / 4)
+print(f"stage5_selected={total}")
+for idx in range(4):
+    start = idx * chunk_size
+    end = min((idx + 1) * chunk_size, total)
+    chunk = dict(items[start:end])
+    out = work / f"test_list_stage5_{idx + 1}.yaml"
+    out.write_text(yaml.safe_dump(chunk, sort_keys=True))
+    print(f"stage5_{idx + 1}_selected={len(chunk)}")
+PY
+}
+
 if [[ "${stage}" == "phase4" ]]; then
   if [[ -f "${STATE_FILE}" ]] && grep -q "^phase4_3_done$" "${STATE_FILE}"; then
     stage="phase4_4"
@@ -145,6 +198,18 @@ if [[ "${stage}" == "phase4" ]]; then
     stage="phase4_2"
   else
     stage="phase4_1"
+  fi
+fi
+
+if [[ "${stage}" == "phase5" ]]; then
+  if [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_3_done$" "${STATE_FILE}"; then
+    stage="phase5_4"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_2_done$" "${STATE_FILE}"; then
+    stage="phase5_3"
+  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_1_done$" "${STATE_FILE}"; then
+    stage="phase5_2"
+  else
+    stage="phase5_1"
   fi
 fi
 
@@ -348,16 +413,35 @@ PY
   exit 0
 fi
 
-if [[ "${stage}" == "phase5" ]]; then
-  if ! probe_zabha_support; then
-    echo "[auto] stage5 blocked: local riscv64-unknown-elf-gcc/binutils do not support Zabha opcodes."
-    echo "[auto] detail: see ${PROBE_LOG}"
-    exit 3
+if [[ "${stage}" =~ ^phase5_[1234]$ ]]; then
+  chunk_idx="${stage#phase5_}"
+  echo "[auto] ${stage}: full Zabha chunk ${chunk_idx}/4"
+  prepare_stage5_subtasks || exit $?
+
+  chunk_file="${WORK_DIR}/test_list_stage5_${chunk_idx}.yaml"
+  chunk_count="$(python3 - <<PY
+import yaml
+from pathlib import Path
+p = Path("${chunk_file}")
+d = yaml.safe_load(p.read_text()) if p.exists() else {}
+print(len(d or {}))
+PY
+)"
+  if [[ "${chunk_count}" == "0" ]]; then
+    echo "[auto] ${stage}: chunk empty, skip run"
+  else
+    run_with_testfile "${chunk_file}"
   fi
-  echo "[auto] stage5: full Zabha validation"
-  bash "${ROOT_DIR}/scripts/run_riscof_zabha_retry.sh"
-  echo "phase5_done" > "${STATE_FILE}"
-  echo "[auto] stage5 passed. full flow complete."
+
+  echo "phase5_${chunk_idx}_done" > "${STATE_FILE}"
+  if [[ "${chunk_idx}" == "4" ]]; then
+    echo "phase5_done" > "${STATE_FILE}"
+    echo "[auto] stage5 all chunks passed. full flow complete."
+  else
+    next_chunk=$((chunk_idx + 1))
+    echo "[auto] ${stage} passed."
+    echo "[auto] next: run the same command again for phase5_${next_chunk}."
+  fi
   exit 0
 fi
 
@@ -367,5 +451,5 @@ if [[ "${stage}" == "done" ]]; then
 fi
 
 echo "unknown stage: ${stage}"
-echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1|phase4_2|phase4_3|phase4_4|phase5]"
+echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1|phase4_2|phase4_3|phase4_4|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
 exit 2

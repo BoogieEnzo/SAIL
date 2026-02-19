@@ -266,3 +266,20 @@
   - Wrote `/home/fengde/SAIL/riscv-arch-test/work-zabha/.auto_stage_state` = `phase2_done`.
 - Next action:
   - Run same command again to execute `phase3`.
+
+## 2026-02-19T20:14:54+08:00 - Phase5 Split + Blocked Gate Check
+
+- Script update:
+  - `scripts/run_riscof_zabha_auto.sh` now splits phase5 into `phase5_1..phase5_4`.
+  - `auto` mode can continue phase5 chunk-by-chunk.
+  - `phase5` alias now routes to next unfinished phase5 chunk.
+- Acceptance checks:
+  - `bash -n scripts/run_riscof_zabha_auto.sh` => `bash_syntax_ok`
+  - `bash scripts/run_riscof_zabha_auto.sh phase5_1` => exit `3`
+- Blocked evidence:
+  - Failure command: `bash scripts/run_riscof_zabha_auto.sh phase5_1`
+  - Key error: `stage5 blocked: local riscv64-unknown-elf-gcc/binutils do not support Zabha opcodes`
+  - Detail log: `/home/fengde/SAIL/riscv-arch-test/work-zabha/zabha_probe.log`
+- Minimal next step:
+  1. Provide Zabha-capable `riscv64-unknown-elf-gcc/binutils` in PATH.
+  2. Re-run `bash /home/fengde/SAIL/scripts/run_riscof_zabha_auto.sh` to continue from next pending stage.
