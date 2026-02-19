@@ -123,3 +123,68 @@
 ## 2026-02-19 (follow-up) - ccache bypass
 
 - Root cause: system `cc` is `/usr/lib/ccache/cc`; dune bootstrap runs `cc -c ...` and ccache fails. Created `tools/no_ccache_bin/` with `cc` and `gcc` symlinked to `/usr/bin/gcc`. To finish install: `export PATH="/home/fengde/SAIL/tools/no_ccache_bin:$PATH"` then `opam install -y dune` and `opam install -y sail` (with OPAMROOT and switch 5.1.1).
+
+## 2026-02-19T11:51:21+08:00 - Resume + M3-004 Unblock Attempt
+
+- Session recovery summary:
+  - `docs/AGENT_STATE.json`: current stage `M3`, execution mode `run`.
+  - `docs/TASK_QUEUE.json`: only `M3-004` remains `blocked`.
+  - `docs/RUN_LOG.md` and `docs/CONTEXT_BRIEF.md` reviewed.
+- Quick environment check (required):
+  - Command: `command -v riscof spike sail_riscv_sim riscv64-unknown-elf-gcc || true`
+  - Result: only `/usr/bin/riscv64-unknown-elf-gcc` found in current PATH.
+  - Existence check:
+    - `[exists] .venv`
+    - `[exists] tools/spike`
+    - `[exists] sail-riscv/build`
+- Baseline gate:
+  - Command: `bash scripts/check_min.sh`
+  - Result: passed.
+- Sail toolchain progress:
+  - Command: `bash scripts/install_sail_no_ccache.sh`
+  - Initial failure due broken `tools/no_ccache_bin/ccache` argument pass-through.
+  - Fix applied: updated `tools/no_ccache_bin/ccache` to drop redundant compiler-name tokens.
+  - Re-run result: `sail 0.20.1` and backends installed in local opam switch.
+- Blocking commands and errors:
+  - Command: `cd sail-riscv && ./build_simulator.sh`
+  - Key error:
+    - `SMT solver returned unexpected status 127`
+    - `/bin/sh: 1: z3: not found`
+  - Command: `bash scripts/run_riscof_zabha.sh`
+  - Key error: `missing sail_riscv_sim at /home/fengde/SAIL/sail-riscv/build/c_emulator/sail_riscv_sim`
+  - Command: `apt-get update && apt-get install -y z3`
+  - Key error: `Permission denied` on `/var/lib/apt/lists/lock` (no root privilege).
+  - Command: `opam install -y z3`
+  - Key error: fetch failed (`curl exited with code 6`) due unreachable external network.
+- Decision:
+  - `M3-004` stays `blocked`.
+- Minimal next step:
+  1. Provide root installation of system `z3` (`sudo apt-get install -y z3`), or make `z3` available in PATH.
+  2. Re-run: `cd /home/fengde/SAIL/sail-riscv && OPAMROOT=/home/fengde/SAIL/.opam eval "$(opam env --root /home/fengde/SAIL/.opam --switch 5.1.1)" && ./build_simulator.sh`
+  3. Re-run: `bash /home/fengde/SAIL/scripts/run_riscof_zabha.sh`
+
+## 2026-02-19T11:57:51+08:00 - Post-sudo Continue (M3-004)
+
+- User-assisted system action completed:
+  - `sudo apt-get install -y z3`
+  - Verified: `z3 --version` => `4.8.12`
+- Re-validated Sail toolchain:
+  - `sail --version` => `Sail 0.20.1`
+- Execution attempt:
+  - Command: `cd sail-riscv && ./build_simulator.sh`
+  - Result: blocked during CMake FetchContent download for dependencies.
+  - Failed URL examples:
+    - `https://github.com/CLIUtils/CLI11/releases/download/v2.6.1/CLI11.hpp`
+  - Key error:
+    - `status_code: 6`
+    - `Couldn't resolve host name`
+    - `Could not resolve host: github.com`
+- Current runtime impact:
+  - `sail_riscv_sim` still not generated at `sail-riscv/build/c_emulator/sail_riscv_sim`.
+  - `bash scripts/run_riscof_zabha.sh` cannot pass precheck due missing simulator.
+- Decision:
+  - Keep `M3-004` as `blocked` with updated root cause (network/DNS for GitHub fetch).
+- Minimal next step:
+  1. Restore access to `github.com` (DNS/proxy) for build-time FetchContent.
+  2. Re-run `cd /home/fengde/SAIL/sail-riscv && OPAMROOT=/home/fengde/SAIL/.opam eval "$(opam env --root /home/fengde/SAIL/.opam --switch 5.1.1)" && ./build_simulator.sh`.
+  3. Re-run `bash /home/fengde/SAIL/scripts/run_riscof_zabha.sh`.
