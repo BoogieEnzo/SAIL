@@ -619,3 +619,68 @@ stage4_48_selected=12
   -  = 
 - Next action:
   1. Continue auto-loop to .
+
+## 2026-02-20T10:24:41+08:00 - phase4_12 Result (auto-loop)
+
+- Command:
+  - [auto] phase4_13: full-compatible chunk 13/48
+stage4_selected=1892
+[auto] probe: no Zabha support, stage4 excludes unsupported extension tests
+stage4_1_selected=40
+stage4_2_selected=40
+stage4_3_selected=40
+stage4_4_selected=40
+stage4_5_selected=40
+stage4_6_selected=40
+stage4_7_selected=40
+stage4_8_selected=40
+stage4_9_selected=40
+stage4_10_selected=40
+stage4_11_selected=40
+stage4_12_selected=40
+stage4_13_selected=40
+stage4_14_selected=40
+stage4_15_selected=40
+stage4_16_selected=40
+stage4_17_selected=40
+stage4_18_selected=40
+stage4_19_selected=40
+stage4_20_selected=40
+stage4_21_selected=40
+stage4_22_selected=40
+stage4_23_selected=40
+stage4_24_selected=40
+stage4_25_selected=40
+stage4_26_selected=40
+stage4_27_selected=40
+stage4_28_selected=40
+stage4_29_selected=40
+stage4_30_selected=40
+stage4_31_selected=40
+stage4_32_selected=40
+stage4_33_selected=40
+stage4_34_selected=40
+stage4_35_selected=40
+stage4_36_selected=40
+stage4_37_selected=40
+stage4_38_selected=40
+stage4_39_selected=40
+stage4_40_selected=40
+stage4_41_selected=40
+stage4_42_selected=40
+stage4_43_selected=40
+stage4_44_selected=40
+stage4_45_selected=40
+stage4_46_selected=40
+stage4_47_selected=40
+stage4_48_selected=12
+[auto] phase4_13 passed.
+[auto] next: run the same command again for phase4_14.
+- Selection/result:
+  - 
+  - Test outcome: 
+  - Script exit code: 
+- State update:
+  -  = 
+- Next action:
+  1. Continue auto-loop to .
