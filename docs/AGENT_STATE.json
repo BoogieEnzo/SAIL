@@ -3,6 +3,6 @@
   "allow_development": true,
   "current_stage": "M3",
   "current_task": "M3-004",
-  "updated_at": "2026-02-20T07:48:13+08:00",
-  "notes": "M3-004 phased execution active: phase4 split is 48 chunks and phase5 remains 4 chunks. riscof runtime config now enforces jobs=2 for rv64 DUT/reference. latest result phase4_6 passed (40/40), current checkpoint is phase4_6_done, next target is phase4_7 with per-chunk reporting and commit."
+  "updated_at": "2026-02-20T10:06:54+08:00",
+  "notes": "M3-004 phase4 auto-loop active (48 chunks, jobs=2 runtime). latest result phase4_7 passed (40/40), checkpoint phase4_7_done, next phase4_8."
 }

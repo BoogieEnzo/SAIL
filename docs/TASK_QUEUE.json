@@ -149,7 +149,7 @@
         "bash -lc 'command -v spike >/dev/null'",
         "bash -lc 'command -v sail_riscv_sim >/dev/null'"
       ],
-      "notes": "phased validation active: phase4 is split into 48 chunks and phase5 remains 4 chunks for resumable execution. runtime config injects jobs=2 for rv64 plugins during each run. Baseline phase1/phase2/phase3 already passed; latest chunk result is phase4_6 passed (40/40) with state checkpoint phase4_6_done, next target phase4_7. phase5_1 gate check returns blocked(exit 3) on current host until toolchain gains Zabha opcode support."
+      "notes": "phase4 auto-loop active (48 chunks, jobs=2 runtime): latest phase4_7 passed (40/40), checkpoint phase4_7_done, next phase4_8; phase5 remains blocked on non-Zabha toolchain."
     }
   ]
 }
