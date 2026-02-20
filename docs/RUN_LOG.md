@@ -879,3 +879,16 @@ stage4_48_selected=12
   -  = 
 - Next action:
   1. Continue auto-loop to .
+
+## 2026-02-20T10:54:53+08:00 - PH4 Heartbeat Added
+
+- Added live heartbeat file for phase4 total progress:
+  - `docs/PH4_HEARTBEAT.md`
+- Script update:
+  - `scripts/auto_phase4_loop.sh` now updates heartbeat before and after each chunk.
+  - heartbeat includes: done/remaining/progress/current-next/state/last-log.
+- Reliability fix:
+  - removed markdown backticks in loop-generated docs blocks to avoid shell command-substitution side effects.
+- Auto-loop restart:
+  - restored checkpoint to confirmed `phase4_18_done` and restarted loop.
+  - current target resumed at `phase4_19`.
