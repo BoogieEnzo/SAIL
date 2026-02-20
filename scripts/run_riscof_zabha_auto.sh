@@ -15,8 +15,9 @@ STAGE4_TESTLIST="${WORK_DIR}/test_list_stage4.yaml"
 STAGE5_TESTLIST="${WORK_DIR}/test_list_stage5.yaml"
 PROBE_LOG="${WORK_DIR}/zabha_probe.log"
 PHASE4_CHUNKS=48
-PHASE5_CHUNKS=4
+PHASE5_CHUNKS=48
 RISCOF_JOBS="${RISCOF_JOBS:-2}"
+LOCAL_TOOLCHAIN_BIN="${LOCAL_TOOLCHAIN_BIN:-${ROOT_DIR}/tools/riscv-zabha/bin}"
 
 if [[ ! -x "${ROOT_DIR}/.venv/bin/riscof" ]]; then
   echo "missing ${ROOT_DIR}/.venv/bin/riscof"
@@ -32,6 +33,10 @@ if [[ ! -x "${ROOT_DIR}/sail-riscv/build/c_emulator/sail_riscv_sim" ]]; then
 fi
 
 export PATH="${ROOT_DIR}/tools/spike/bin:${ROOT_DIR}/sail-riscv/build/c_emulator:${PATH}"
+if [[ -d "${LOCAL_TOOLCHAIN_BIN}" ]]; then
+  export PATH="${LOCAL_TOOLCHAIN_BIN}:${PATH}"
+  echo "[auto] using local toolchain bin: ${LOCAL_TOOLCHAIN_BIN}"
+fi
 
 mkdir -p "${WORK_DIR}"
 cd "${CFG_DIR}"
@@ -223,9 +228,9 @@ dst.write_text(yaml.safe_dump(filtered, sort_keys=True))
 
 items = sorted(filtered.items(), key=lambda kv: kv[0])
 total = len(items)
-chunk_size = math.ceil(total / 4)
+chunk_size = math.ceil(total / 48)
 print(f"stage5_selected={total}")
-for idx in range(4):
+for idx in range(48):
     start = idx * chunk_size
     end = min((idx + 1) * chunk_size, total)
     chunk = dict(items[start:end])
@@ -253,14 +258,19 @@ if [[ "${stage}" == "phase4" ]]; then
 fi
 
 if [[ "${stage}" == "phase5" ]]; then
-  if [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_3_done$" "${STATE_FILE}"; then
-    stage="phase5_4"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_2_done$" "${STATE_FILE}"; then
-    stage="phase5_3"
-  elif [[ -f "${STATE_FILE}" ]] && grep -q "^phase5_1_done$" "${STATE_FILE}"; then
-    stage="phase5_2"
-  else
-    stage="phase5_1"
+  stage="phase5_1"
+  if [[ -f "${STATE_FILE}" ]]; then
+    state_val="$(cat "${STATE_FILE}")"
+    if [[ "${state_val}" =~ ^phase5_([0-9]+)_done$ ]]; then
+      idx="${BASH_REMATCH[1]}"
+      if (( idx < PHASE5_CHUNKS )); then
+        stage="phase5_$((idx + 1))"
+      else
+        stage="done"
+      fi
+    elif [[ "${state_val}" == "phase5_done" ]]; then
+      stage="done"
+    fi
   fi
 fi
 
@@ -435,7 +445,7 @@ if [[ "${stage}" =~ ^phase4_([0-9]+)$ ]]; then
   chunk_idx="${BASH_REMATCH[1]}"
   if (( chunk_idx < 1 || chunk_idx > PHASE4_CHUNKS )); then
     echo "unknown stage: ${stage}"
-    echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_${PHASE4_CHUNKS}|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
+    echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_${PHASE4_CHUNKS}|phase5|phase5_1..phase5_${PHASE5_CHUNKS}]"
     exit 2
   fi
   echo "[auto] ${stage}: full-compatible chunk ${chunk_idx}/${PHASE4_CHUNKS}"
@@ -469,8 +479,13 @@ PY
   exit 0
 fi
 
-if [[ "${stage}" =~ ^phase5_[1234]$ ]]; then
-  chunk_idx="${stage#phase5_}"
+if [[ "${stage}" =~ ^phase5_([0-9]+)$ ]]; then
+  chunk_idx="${BASH_REMATCH[1]}"
+  if (( chunk_idx < 1 || chunk_idx > PHASE5_CHUNKS )); then
+    echo "unknown stage: ${stage}"
+    echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_${PHASE4_CHUNKS}|phase5|phase5_1..phase5_${PHASE5_CHUNKS}]"
+    exit 2
+  fi
   echo "[auto] ${stage}: full Zabha chunk ${chunk_idx}/${PHASE5_CHUNKS}"
   prepare_stage5_subtasks || exit $?
 
@@ -507,5 +522,5 @@ if [[ "${stage}" == "done" ]]; then
 fi
 
 echo "unknown stage: ${stage}"
-echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_${PHASE4_CHUNKS}|phase5|phase5_1|phase5_2|phase5_3|phase5_4]"
+echo "usage: bash scripts/run_riscof_zabha_auto.sh [auto|phase1|phase2|phase3|phase4|phase4_1..phase4_${PHASE4_CHUNKS}|phase5|phase5_1..phase5_${PHASE5_CHUNKS}]"
 exit 2
