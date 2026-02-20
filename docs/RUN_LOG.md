@@ -892,3 +892,16 @@ stage4_48_selected=12
 - Auto-loop restart:
   - restored checkpoint to confirmed `phase4_18_done` and restarted loop.
   - current target resumed at `phase4_19`.
+
+## 2026-02-20T10:54:53+08:00 - phase4_19 Result (auto-loop)
+
+- Command:
+  - bash scripts/run_riscof_zabha_auto.sh
+- Selection/result:
+  - phase4_19_selected=unknown
+  - Test outcome: 40/40 Passed
+  - Script exit code: 0
+- State update:
+  - riscv-arch-test/work-zabha/.auto_stage_state = phase4_19_done
+- Next action:
+  1. Continue auto-loop to phase4_20.

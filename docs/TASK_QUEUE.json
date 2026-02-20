@@ -149,7 +149,7 @@
         "bash -lc 'command -v spike >/dev/null'",
         "bash -lc 'command -v sail_riscv_sim >/dev/null'"
       ],
-      "notes": "phase4 auto-loop active (48 chunks, jobs=2 runtime): latest phase4_18 passed (40/40), checkpoint phase4_18_done, next phase4_19; phase5 remains blocked on non-Zabha toolchain."
+      "notes": "phase4 auto-loop active (48 chunks, jobs=2 runtime): latest phase4_19 passed (40/40), checkpoint phase4_19_done, next phase4_20; phase5 remains blocked on non-Zabha toolchain."
     }
   ]
 }
