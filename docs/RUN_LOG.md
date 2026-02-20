@@ -957,3 +957,16 @@ stage4_48_selected=12
   - riscv-arch-test/work-zabha/.auto_stage_state = phase4_23_done
 - Next action:
   1. Continue auto-loop to phase4_24.
+
+## 2026-02-20T12:08:19+08:00 - phase4_24 Result (auto-loop)
+
+- Command:
+  - bash scripts/run_riscof_zabha_auto.sh
+- Selection/result:
+  - phase4_24_selected=unknown
+  - Test outcome: 40/40 Passed
+  - Script exit code: 0
+- State update:
+  - riscv-arch-test/work-zabha/.auto_stage_state = phase4_24_done
+- Next action:
+  1. Continue auto-loop to phase4_25.
