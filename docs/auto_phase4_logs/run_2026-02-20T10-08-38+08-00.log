@@ -1,0 +1,5 @@
+[auto] phase4_8: full-compatible chunk 8/48
+    INFO | ****** RISCOF: RISC-V Architectural Test Framework 1.25.3 *******
+    INFO | using riscv_isac version : 0.18.0
+    INFO | using riscv_config version : 3.18.3
+    INFO | Generating database for suite: /home/fengde/SAIL/riscv-arch-test/riscv-test-suite
