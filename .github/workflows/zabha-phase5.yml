@@ -1,0 +1,142 @@
+# 在云端跑 Zabha phase5（本地工具链不支持时可用此 workflow）
+# 触发：手动 workflow_dispatch，或 push 到配置分支时可选触发
+name: Zabha Phase5 (cloud)
+
+on:
+  workflow_dispatch:
+    inputs:
+      phase5_chunk:
+        description: 'Phase5 chunk to run (e.g. phase5_1 or "auto" for next)'
+        required: true
+        default: 'phase5_1'
+  push:
+    branches: [master, main]
+    paths:
+      - 'scripts/run_riscof_zabha_auto.sh'
+      - 'scripts/auto_phase5_loop.sh'
+      - '.github/workflows/zabha-phase5.yml'
+
+env:
+  SAIL_ROOT: ${{ github.workspace }}
+  JOBS: 4
+
+jobs:
+  phase5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout SAIL
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 2
+
+      - name: Ensure riscv-arch-test present
+        run: |
+          if [[ ! -d riscv-arch-test/.git ]]; then
+            echo "Cloning riscv-arch-test..."
+            git clone --depth 1 https://github.com/BoogieEnzo/riscv-arch-test.git riscv-arch-test -b act4 || \
+            git clone --depth 1 https://github.com/riscv-non-isa/riscv-arch-test.git riscv-arch-test -b act4
+          fi
+          ls -la riscv-arch-test/ || true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip python3-venv
+          sudo apt-get install -y autoconf automake autotools-dev curl \
+            libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex \
+            texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev ninja-build || true
+
+      - name: Create venv and install riscof
+        run: |
+          python3 -m venv .venv
+          . .venv/bin/activate
+          pip install --upgrade pip
+          pip install pyyaml riscof
+          which riscof && riscof --version || true
+
+      - name: Restore Zabha toolchain from cache
+        id: toolchain-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: tools/riscv-zabha
+          key: zabha-toolchain-${{ runner.os }}-v1
+          fail-on-cache-miss: false
+
+      - name: Build Zabha toolchain (on cache miss)
+        if: steps.toolchain-cache.outputs.cache-restored != 'true'
+        run: |
+          mkdir -p tools
+          if [[ ! -d tools/riscv-gnu-toolchain ]]; then
+            git clone --depth 1 https://github.com/riscv-collab/riscv-gnu-toolchain.git tools/riscv-gnu-toolchain
+            (cd tools/riscv-gnu-toolchain && git submodule update --init --recursive)
+          fi
+          (cd tools/riscv-gnu-toolchain && \
+            ./configure --prefix="${{ github.workspace }}/tools/riscv-zabha" --disable-gdb && \
+            make -j"${{ env.JOBS }}" newlib MAKEINFO=true)
+          echo "Checking Zabha support..."
+          echo -e '.text\n.globl _start\n_start:\n  amoadd.b x1, x2, (x3)' > /tmp/zabha_probe.S
+          "${{ github.workspace }}/tools/riscv-zabha/bin/riscv64-unknown-elf-gcc" -c -march=rv64imafd_zicsr_zabha -mabi=lp64 /tmp/zabha_probe.S -o /tmp/zabha_probe.o
+          echo "Zabha toolchain OK"
+
+      - name: Save Zabha toolchain to cache
+        if: steps.toolchain-cache.outputs.cache-restored != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: tools/riscv-zabha
+          key: zabha-toolchain-${{ runner.os }}-v1
+
+      - name: Install Spike (simulator)
+        run: |
+          sudo apt-get install -y device-tree-compiler libfdt-dev 2>/dev/null || true
+          if ! command -v spike >/dev/null 2>&1; then
+            if [[ ! -d tools/riscv-isa-sim ]]; then
+              git clone --depth 1 https://github.com/riscv-software-src/riscv-isa-sim.git tools/riscv-isa-sim
+              (cd tools/riscv-isa-sim && mkdir build && cd build && ../configure --prefix="${{ github.workspace }}/tools/spike" && make -j"${{ env.JOBS }}" && make install)
+            fi
+            echo "${{ github.workspace }}/tools/spike/bin" >> $GITHUB_PATH
+            echo "${{ github.workspace }}/tools/spike/bin" >> $GITHUB_ENV
+            export PATH="${{ github.workspace }}/tools/spike/bin:$PATH"
+          fi
+          which spike && spike --version || true
+
+      - name: Build Sail model (if sail-riscv present)
+        run: |
+          if [[ -d sail-riscv ]] && [[ ! -x sail-riscv/build/c_emulator/sail_riscv_sim ]]; then
+            (cd sail-riscv && make c_emulator -j"${{ env.JOBS }}" || true)
+          fi
+          if [[ -x sail-riscv/build/c_emulator/sail_riscv_sim ]]; then
+            echo "sail_riscv_sim found"
+          else
+            echo "::warning::sail_riscv_sim not found; phase5 may fail if config requires it"
+          fi
+
+      - name: Run Phase5
+        env:
+          SAIL_ROOT: ${{ github.workspace }}
+          LOCAL_TOOLCHAIN_BIN: ${{ github.workspace }}/tools/riscv-zabha/bin
+          RISCOF_JOBS: 2
+        run: |
+          export PATH="${{ github.workspace }}/.venv/bin:$PATH"
+          export PATH="${{ github.workspace }}/tools/riscv-zabha/bin:${PATH:-}"
+          if [[ -d "${{ github.workspace }}/tools/spike/bin" ]]; then
+            export PATH="${{ github.workspace }}/tools/spike/bin:$PATH"
+          fi
+          if [[ -d sail-riscv/build/c_emulator ]]; then
+            export PATH="${{ github.workspace }}/sail-riscv/build/c_emulator:$PATH"
+          fi
+          CHUNK="${{ github.event.inputs.phase5_chunk || 'phase5_1' }}"
+          bash scripts/run_riscof_zabha_auto.sh "$CHUNK"
+
+      - name: Upload phase5 logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase5-logs
+          path: |
+            riscv-arch-test/work-zabha/.auto_stage_state
+            docs/PH5_HEARTBEAT.md
+            docs/auto_phase5_logs/
+          if-no-files-found: ignore
