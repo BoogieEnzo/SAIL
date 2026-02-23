@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="/home/fengde/SAIL"
+ROOT_DIR="${SAIL_ROOT:-/home/fengde/SAIL}"
+export SAIL_ROOT="${ROOT_DIR}"
 TC_SRC_DIR="${ROOT_DIR}/tools/riscv-gnu-toolchain"
 TC_PREFIX="${ROOT_DIR}/tools/riscv-zabha"
 JOBS="${JOBS:-2}"

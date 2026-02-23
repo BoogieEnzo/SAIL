@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="/home/fengde/SAIL"
+ROOT_DIR="${SAIL_ROOT:-/home/fengde/SAIL}"
+export SAIL_ROOT="${ROOT_DIR}"
 RAT_DIR="${ROOT_DIR}/riscv-arch-test"
 CFG_DIR="${RAT_DIR}/riscof-plugins/rv64"
 WORK_DIR="${RAT_DIR}/work-zabha"
@@ -154,10 +155,11 @@ prepare_stage4_subtasks() {
     echo "[auto] probe: Zabha supported, stage4 includes all tests"
   else
     python3 - <<'PY'
+import os
 import yaml
 from pathlib import Path
 
-work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
+work = Path(os.environ.get("SAIL_ROOT", "/home/fengde/SAIL")) / "riscv-arch-test" / "work-zabha"
 src = work / "test_list.yaml"
 dst = work / "test_list_stage4.yaml"
 data = yaml.safe_load(src.read_text()) or {}
@@ -172,11 +174,12 @@ PY
   fi
 
   python3 - <<'PY'
+import os
 import math
 import yaml
 from pathlib import Path
 
-work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
+work = Path(os.environ.get("SAIL_ROOT", "/home/fengde/SAIL")) / "riscv-arch-test" / "work-zabha"
 src = work / "test_list_stage4.yaml"
 data = yaml.safe_load(src.read_text()) or {}
 items = sorted(data.items(), key=lambda kv: kv[0])
@@ -210,11 +213,12 @@ prepare_stage5_subtasks() {
     --work-dir "${WORK_DIR}"
 
   python3 - <<'PY'
+import os
 import math
 import yaml
 from pathlib import Path
 
-work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
+work = Path(os.environ.get("SAIL_ROOT", "/home/fengde/SAIL")) / "riscv-arch-test" / "work-zabha"
 src = work / "test_list.yaml"
 dst = work / "test_list_stage5.yaml"
 data = yaml.safe_load(src.read_text()) or {}
@@ -297,7 +301,7 @@ import yaml
 import os
 from pathlib import Path
 
-work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
+work = Path(os.environ.get("SAIL_ROOT", "/home/fengde/SAIL")) / "riscv-arch-test" / "work-zabha"
 src = work / "test_list.yaml"
 dst = work / "test_list_stage1.yaml"
 mode = os.environ.get("FILTER_MODE", "zabha")
@@ -356,7 +360,7 @@ import os
 import yaml
 from pathlib import Path
 
-work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
+work = Path(os.environ.get("SAIL_ROOT", "/home/fengde/SAIL")) / "riscv-arch-test" / "work-zabha"
 src = work / "test_list.yaml"
 dst = work / "test_list_stage2.yaml"
 mode = os.environ.get("FILTER_MODE", "core_compat")
@@ -408,7 +412,7 @@ import os
 import yaml
 from pathlib import Path
 
-work = Path("/home/fengde/SAIL/riscv-arch-test/work-zabha")
+work = Path(os.environ.get("SAIL_ROOT", "/home/fengde/SAIL")) / "riscv-arch-test" / "work-zabha"
 src = work / "test_list.yaml"
 dst = work / "test_list_stage3.yaml"
 mode = os.environ.get("FILTER_MODE", "wide_compat")
