@@ -81,3 +81,50 @@ stage4_48_selected=12
     INFO | Running Build for Reference
     INFO | Running Tests on DUT.
     INFO | Running Tests on Reference Model.
+    INFO | Initiating signature checking.
+    INFO | Following 40 tests have been run :
+
+    INFO | TEST NAME                                          : COMMIT ID                                : STATUS
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-036.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-037.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-038.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-039.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-040.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-041.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-042.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-043.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-044.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-045.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-046.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-047.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-048.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-049.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b15/fnmsub_b15-050.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b16-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b17-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b18-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b2-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b3-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b4-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b5-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b6-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b7-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fnmsub_b8-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsgnj_b1-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsgnjn_b1-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsgnjx_b1-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsqrt_b1-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsqrt_b2-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsqrt_b20-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsqrt_b3-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsqrt_b4-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsqrt_b5-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsqrt_b7-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsqrt_b8-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsqrt_b9-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsub_b1-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsub_b10-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv32i_m/F/src/fsub_b11-01.S : -                                        : Passed
+    INFO | Test report generated at /home/fengde/SAIL/riscv-arch-test/work-zabha/report.html.
+[auto] phase4_26 passed.
+[auto] next: run the same command again for phase4_27.

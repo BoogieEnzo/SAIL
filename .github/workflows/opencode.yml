@@ -24,15 +24,9 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Auth Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
-
       - name: Run OpenCode
         uses: anomalyco/opencode/github@latest
         env:
-          GOOGLE_CLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-          VERTEX_LOCATION: global
+          GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
         with:
-          model: google-vertex/gemini-2.5-pro
+          model: google/gemini-2.0-flash

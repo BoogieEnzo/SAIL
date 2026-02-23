@@ -1,0 +1,130 @@
+[auto] phase4_40: full-compatible chunk 40/48
+    INFO | ****** RISCOF: RISC-V Architectural Test Framework 1.25.3 *******
+    INFO | using riscv_isac version : 0.18.0
+    INFO | using riscv_config version : 3.18.3
+    INFO | Generating database for suite: /home/fengde/SAIL/riscv-arch-test/riscv-test-suite
+    INFO | Database File Generated: /home/fengde/SAIL/riscv-arch-test/work-zabha/database.yaml
+    INFO | Env path set to/home/fengde/SAIL/riscv-arch-test/riscv-test-suite/env
+    INFO | Reading configuration from: /home/fengde/SAIL/riscv-arch-test/riscof-plugins/rv64/config.runtime.ini
+    INFO | Preparing Models
+    INFO | Input-ISA file
+    INFO | ISACheck: Loading input file: /home/fengde/SAIL/riscv-arch-test/riscof-plugins/rv64/spike_simple/spike_simple_isa.yaml
+    INFO | ISACheck: Load Schema /home/fengde/SAIL/.venv/lib/python3.12/site-packages/riscv_config/schemas/schema_isa.yaml
+    INFO | ISACheck: Processing Hart:0
+    INFO | ISACheck: Initiating Validation for Hart:0
+    INFO | ISACheck: No errors for Hart:0
+    INFO | ISACheck:  Updating fields node for each CSR in Hart:0
+    INFO | ISACheck: Dumping out Normalized Checked YAML: /home/fengde/SAIL/riscv-arch-test/work-zabha/spike_simple_isa_checked.yaml
+    INFO | Input-Platform file
+    INFO | Loading input file: /home/fengde/SAIL/riscv-arch-test/riscof-plugins/rv64/spike_simple/spike_simple_platform.yaml
+    INFO | Load Schema /home/fengde/SAIL/.venv/lib/python3.12/site-packages/riscv_config/schemas/schema_platform.yaml
+    INFO | Initiating Validation
+    INFO | No Syntax errors in Input Platform Yaml. :)
+    INFO | Dumping out Normalized Checked YAML: /home/fengde/SAIL/riscv-arch-test/work-zabha/spike_simple_platform_checked.yaml
+    INFO | Selecting Tests.
+stage4_selected=1892
+[auto] probe: no Zabha support, stage4 excludes unsupported extension tests
+stage4_1_selected=40
+stage4_2_selected=40
+stage4_3_selected=40
+stage4_4_selected=40
+stage4_5_selected=40
+stage4_6_selected=40
+stage4_7_selected=40
+stage4_8_selected=40
+stage4_9_selected=40
+stage4_10_selected=40
+stage4_11_selected=40
+stage4_12_selected=40
+stage4_13_selected=40
+stage4_14_selected=40
+stage4_15_selected=40
+stage4_16_selected=40
+stage4_17_selected=40
+stage4_18_selected=40
+stage4_19_selected=40
+stage4_20_selected=40
+stage4_21_selected=40
+stage4_22_selected=40
+stage4_23_selected=40
+stage4_24_selected=40
+stage4_25_selected=40
+stage4_26_selected=40
+stage4_27_selected=40
+stage4_28_selected=40
+stage4_29_selected=40
+stage4_30_selected=40
+stage4_31_selected=40
+stage4_32_selected=40
+stage4_33_selected=40
+stage4_34_selected=40
+stage4_35_selected=40
+stage4_36_selected=40
+stage4_37_selected=40
+stage4_38_selected=40
+stage4_39_selected=40
+stage4_40_selected=40
+stage4_41_selected=40
+stage4_42_selected=40
+stage4_43_selected=40
+stage4_44_selected=40
+stage4_45_selected=40
+stage4_46_selected=40
+stage4_47_selected=40
+stage4_48_selected=12
+    INFO | ****** RISCOF: RISC-V Architectural Test Framework 1.25.3 *******
+    INFO | using riscv_isac version : 0.18.0
+    INFO | using riscv_config version : 3.18.3
+    INFO | Reading configuration from: /home/fengde/SAIL/riscv-arch-test/riscof-plugins/rv64/config.runtime.ini
+    INFO | Preparing Models
+    INFO | Running Build for DUT
+    INFO | Running Build for Reference
+    INFO | Running Tests on DUT.
+    INFO | Running Tests on Reference Model.
+    INFO | Initiating signature checking.
+    INFO | Following 40 tests have been run :
+
+    INFO | TEST NAME                                          : COMMIT ID                                : STATUS
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/lb-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/lbu-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/ld-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/lh-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/lhu-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/lui-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/lw-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/lwu-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/or-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/ori-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sb-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sd-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sh-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sll-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/slli-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/slliw-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sllw-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/slt-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/slti-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sltiu-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sltu-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sra-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/srai-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sraiw-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sraw-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/srl-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/srli-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/srliw-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/srlw-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sub-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/subw-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/sw-align-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/xor-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/I/src/xori-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/K/src/aes64ds-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/K/src/aes64dsm-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/K/src/aes64es-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/K/src/aes64esm-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/K/src/aes64im-01.S : -                                        : Passed
+    INFO | /home/fengde/SAIL/riscv-arch-test/riscv-test-suite/rv64i_m/K/src/aes64ks1i-01.S : -                                        : Passed
+    INFO | Test report generated at /home/fengde/SAIL/riscv-arch-test/work-zabha/report.html.
+[auto] phase4_40 passed.
+[auto] next: run the same command again for phase4_41.

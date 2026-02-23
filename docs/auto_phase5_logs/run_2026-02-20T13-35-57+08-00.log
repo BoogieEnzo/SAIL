@@ -1,0 +1,3 @@
+[auto] phase5_1: full Zabha chunk 1/48
+[auto] stage5 blocked: local riscv64-unknown-elf-gcc/binutils do not support Zabha opcodes.
+[auto] detail: see /home/fengde/SAIL/riscv-arch-test/work-zabha/zabha_probe.log
