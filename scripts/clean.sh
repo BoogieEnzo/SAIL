@@ -1,9 +1,18 @@
 #!/bin/bash
-# 强力清理脚本 v2：Docker、Snap、Flatpak、日志、缓存、旧内核等
+# 强力清理脚本 v3：全局（Docker/Snap/缓存等）+ SAIL 项目目录
 # 有风险的操作会先列出并询问 [y/N]，确认后再执行
 
 set -e
 BEFORE=$(df / | tail -1 | awk '{print $3}')
+
+# SAIL 根目录：优先环境变量，否则按脚本位置推断（脚本在 SAIL/scripts/clean.sh）
+SAIL_ROOT="${SAIL_ROOT:-}"
+if [[ -z "$SAIL_ROOT" ]] && [[ -f "${BASH_SOURCE[0]}" ]]; then
+  _script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  if [[ -d "${_script_dir}/../sail-riscv" ]] && [[ -d "${_script_dir}/../docs" ]]; then
+    SAIL_ROOT="$(cd "${_script_dir}/.." && pwd)"
+  fi
+fi
 
 confirm() {
   local msg="$1"
@@ -189,6 +198,67 @@ if [[ -d ~/.cargo/registry ]]; then
       echo "已清理."
     fi
   fi
+fi
+
+# =============================================================================
+# 三、SAIL 项目目录（可选，仅在检测到 SAIL 根目录时执行）
+# =============================================================================
+if [[ -n "$SAIL_ROOT" ]] && [[ -d "$SAIL_ROOT" ]]; then
+  echo "=== SAIL 项目目录清理（根目录: $SAIL_ROOT）==="
+  echo ""
+
+  # ---------------------------------------------------------------------------
+  # 15. docs/automation-logs 超过 7 天的日志
+  # ---------------------------------------------------------------------------
+  if [[ -d "${SAIL_ROOT}/docs/automation-logs" ]]; then
+    OLD_SAIL_LOGS=$(find "${SAIL_ROOT}/docs/automation-logs" -maxdepth 1 -type f -name "*.log" -mtime +7 2>/dev/null || true)
+    if [[ -n "$OLD_SAIL_LOGS" ]]; then
+      _cnt=$(echo "$OLD_SAIL_LOGS" | wc -l)
+      echo ">>> docs/automation-logs 中超过 7 天的日志文件: $_cnt 个"
+      if confirm "删除上述旧日志?"; then
+        echo "$OLD_SAIL_LOGS" | xargs -r rm -f 2>/dev/null || true
+        echo "已删除."
+      fi
+    fi
+  fi
+
+  # ---------------------------------------------------------------------------
+  # 16. tools/riscv-gnu-toolchain（源码+构建目录，约数 GB；删除后需重新 clone 才能再编工具链）
+  # ---------------------------------------------------------------------------
+  if [[ -d "${SAIL_ROOT}/tools/riscv-gnu-toolchain" ]]; then
+    TC_SIZE=$(du -sh "${SAIL_ROOT}/tools/riscv-gnu-toolchain" 2>/dev/null | cut -f1 || echo "?")
+    echo ">>> tools/riscv-gnu-toolchain 约: $TC_SIZE（仅构建工具链用；若已装好 tools/riscv-zabha 且不需重编可删）"
+    if confirm "删除 tools/riscv-gnu-toolchain（释放空间，需时再 clone）?"; then
+      rm -rf "${SAIL_ROOT}/tools/riscv-gnu-toolchain"
+      echo "已删除."
+    fi
+  fi
+
+  # ---------------------------------------------------------------------------
+  # 17. tools/riscv-zabha/share（文档与 locale，不影响 gcc/as 执行）
+  # ---------------------------------------------------------------------------
+  if [[ -d "${SAIL_ROOT}/tools/riscv-zabha/share" ]]; then
+    SHARE_SIZE=$(du -sh "${SAIL_ROOT}/tools/riscv-zabha/share" 2>/dev/null | cut -f1 || echo "?")
+    echo ">>> tools/riscv-zabha/share 约: $SHARE_SIZE（文档/locale，删除不影响编译器）"
+    if confirm "删除 tools/riscv-zabha/share?"; then
+      rm -rf "${SAIL_ROOT}/tools/riscv-zabha/share"
+      echo "已删除."
+    fi
+  fi
+
+  # ---------------------------------------------------------------------------
+  # 18. sail-riscv/build（C 模拟器构建产物；删除后需重新编译 sail_riscv_sim）
+  # ---------------------------------------------------------------------------
+  if [[ -d "${SAIL_ROOT}/sail-riscv/build" ]]; then
+    BUILD_SIZE=$(du -sh "${SAIL_ROOT}/sail-riscv/build" 2>/dev/null | cut -f1 || echo "?")
+    echo ">>> sail-riscv/build 约: $BUILD_SIZE（删除后需在 sail-riscv 下重新执行 build_simulator.sh）"
+    if confirm "删除 sail-riscv/build?"; then
+      rm -rf "${SAIL_ROOT}/sail-riscv/build"
+      echo "已删除."
+    fi
+  fi
+
+  echo ""
 fi
 
 # =============================================================================
