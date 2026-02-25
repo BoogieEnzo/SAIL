@@ -98,7 +98,6 @@ jobs:
               (cd tools/riscv-isa-sim && mkdir build && cd build && ../configure --prefix="${{ github.workspace }}/tools/spike" && make -j"${{ env.JOBS }}" && make install)
             fi
             echo "${{ github.workspace }}/tools/spike/bin" >> $GITHUB_PATH
-            echo "${{ github.workspace }}/tools/spike/bin" >> $GITHUB_ENV
             export PATH="${{ github.workspace }}/tools/spike/bin:$PATH"
           fi
           which spike && spike --version || true
