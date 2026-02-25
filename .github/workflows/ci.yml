@@ -1,0 +1,24 @@
+# 每次 push 到 GitHub 时在云端自动跑这个 workflow
+# 位置说明：此文件必须在「仓库根目录」下的 .github/workflows/ 里，GitHub 才会识别
+name: CI (push 触发示例)
+
+on:
+  push:
+    branches: [ main, master ]   # 只有推送到 main 或 master 时跑（可根据你默认分支改）
+
+jobs:
+  hello:
+    name: 打招呼并检查仓库
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 打印信息
+        run: |
+          echo "✅ 本 workflow 由 push 触发，运行在 GitHub 的 ubuntu 上"
+          echo "仓库默认分支: ${{ github.ref_name }}"
+          echo "最近一次 commit: ${{ github.sha }}"
+
+      - name: 列出仓库顶层目录（证明已拿到代码）
+        run: ls -la
