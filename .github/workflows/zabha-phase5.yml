@@ -29,7 +29,8 @@ jobs:
       - name: Checkout SAIL
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          # 不用 recursive：riscv-arch-test 由下一步单独 clone，避免 .gitmodules 缺 URL 导致 checkout 失败
+          submodules: false
           fetch-depth: 2
 
       - name: Ensure riscv-arch-test present
